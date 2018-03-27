@@ -1,0 +1,22 @@
+# Eclipse
+.classpath
+.project
+.settings
+.metadata
+bin/
+
+# Idea
+*.iml
+*/.idea/
+
+# Gradle
+/.gradle/
+*/build/
+gradle.properties
+
+.DS_Store
+*.log
+
+# Cache folders
+*/.cache/
+/build/
