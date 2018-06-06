@@ -29,15 +29,15 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 /**
  * @author UnAfraid
  */
-public interface IMessageHandler
+public interface IEditedMessageHandler
 {
 	/**
 	 * Fired whenever user types anything but a command
 	 * @param bot the bot
 	 * @param update the update
 	 * @param message the message
-	 * @return
+	 * @return {@code true} if edit was successful, aborting notification to other handlers, {@code false} otherwise, continuing to look for handler that would return {@code true}
 	 * @throws TelegramApiException the exception
 	 */
-	boolean onMessage(AbsSender bot, Update update, Message message) throws TelegramApiException;
+	boolean onEditMessage(AbsSender bot, Update update, Message message) throws TelegramApiException;
 }

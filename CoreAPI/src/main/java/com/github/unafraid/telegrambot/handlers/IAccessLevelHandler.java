@@ -21,23 +21,24 @@
  */
 package com.github.unafraid.telegrambot.handlers;
 
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.api.objects.User;
 
 /**
  * @author UnAfraid
  */
-public interface IEditedMessageHandler
+public interface IAccessLevelHandler
 {
 	/**
-	 * Fired whenever user types anything but a command
-	 * @param bot the bot
-	 * @param update the update
-	 * @param message the message
-	 * @return
-	 * @throws TelegramApiException the exception
+	 * @return The access level required to execute this command
 	 */
-	boolean onEditMessage(AbsSender bot, Update update, Message message) throws TelegramApiException;
+	default int getRequiredAccessLevel()
+	{
+		return 0;
+	}
+	
+	/**
+	 * @param user the user to validate
+	 * @return {@code true} if {@link User} has sufficient access level, {@code false} otherwise
+	 */
+	boolean validate(User user);
 }

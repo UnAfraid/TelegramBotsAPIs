@@ -7,16 +7,15 @@ bin/
 
 # Idea
 *.iml
-*/.idea/
+.idea/
 
 # Gradle
-/.gradle/
-*/build/
+.gradle/
+build/
 gradle.properties
 
 .DS_Store
 *.log
 
 # Cache folders
-*/.cache/
-/build/
+.cache/

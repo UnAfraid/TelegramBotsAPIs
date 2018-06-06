@@ -21,24 +21,23 @@
  */
 package com.github.unafraid.telegrambot.handlers;
 
-import org.telegram.telegrambots.api.objects.User;
+import org.telegram.telegrambots.api.objects.Message;
+import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.bots.DefaultAbsSender;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 /**
  * @author UnAfraid
  */
-public interface IAccessLevelHandler
+public interface IDocumentMessageHandler
 {
 	/**
-	 * @return The access level required to execute this command
+	 * Fired whenever user sends a document
+	 * @param bot the bot
+	 * @param update the update
+	 * @param message the message
+	 * @return {@code true} if handler 'consumed' that event, aborting notification to other handlers, {@code false} otherwise, continuing to look for handler that would return {@code true}
+	 * @throws TelegramApiException the exception
 	 */
-	default int getRequiredAccessLevel()
-	{
-		return 0;
-	}
-	
-	/**
-	 * @param from
-	 * @return
-	 */
-	boolean validate(User from);
+	boolean onDocumentSent(DefaultAbsSender bot, Update update, Message message) throws TelegramApiException;
 }

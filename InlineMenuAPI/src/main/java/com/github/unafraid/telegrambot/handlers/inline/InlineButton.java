@@ -118,7 +118,7 @@ public class InlineButton
 	}
 	
 	/**
-	 * @return
+	 * @return the {@link InlineKeyboardButton}
 	 */
 	public InlineKeyboardButton createInlineKeyboardButton()
 	{
