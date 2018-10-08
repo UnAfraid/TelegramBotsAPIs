@@ -44,25 +44,27 @@ public final class CommandHandlers
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandHandlers.class);
 	private final Map<String, ICommandHandler> handlers = new ConcurrentHashMap<>();
 	
-	protected CommandHandlers()
+	private CommandHandlers()
 	{
 	}
 	
 	/**
 	 * Scans packageName for classes that implements ICommandHandler and registers them into the handlers map
-	 * @param packageName
+	 * @param classLoader the classloader from which package will be loaded
+	 * @param packageName the package name
 	 */
-	public void registerHandlers(String packageName)
+	public void registerHandlers(ClassLoader classLoader, String packageName)
 	{
 		try
 		{
+			int oldCount = handlers.size();
 			//@formatter:off
-			ClassPathUtil.getAllClassesExtending(packageName, ICommandHandler.class)
+			ClassPathUtil.getAllClassesExtending(classLoader, packageName, ICommandHandler.class)
 				.filter(clazz -> !clazz.isInterface())
 				.filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
 				.forEach(this::registerHandler);
 			//@formatter:off
-			LOGGER.info("Registered {} command handlers", handlers.size());
+			LOGGER.info("Registered {} command handlers for package: {}", handlers.size() - oldCount, packageName);
 		}
 		catch (IOException e)
 		{
@@ -122,7 +124,7 @@ public final class CommandHandlers
 		return handlers.values().stream()
 			.filter(clazz::isInstance)
 			.map(clazz::cast)
-			.filter(messageHandler -> messageHandler instanceof IAccessLevelHandler ? ((IAccessLevelHandler) messageHandler).validate(user) : true)
+			.filter(messageHandler -> !(messageHandler instanceof IAccessLevelHandler) || ((IAccessLevelHandler) messageHandler).validate(user))
 			.collect(Collectors.toList());
 		//@formatter:on
 	}
@@ -134,6 +136,6 @@ public final class CommandHandlers
 	
 	private static class SingletonHolder
 	{
-		protected static final CommandHandlers INSTANCE = new CommandHandlers();
+		private static final CommandHandlers INSTANCE = new CommandHandlers();
 	}
 }
