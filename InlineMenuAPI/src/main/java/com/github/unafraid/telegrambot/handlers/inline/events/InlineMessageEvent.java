@@ -21,9 +21,9 @@
  */
 package com.github.unafraid.telegrambot.handlers.inline.events;
 
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.bots.AbsSender;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import com.github.unafraid.telegrambot.handlers.inline.InlineButton;
 import com.github.unafraid.telegrambot.handlers.inline.InlineContext;

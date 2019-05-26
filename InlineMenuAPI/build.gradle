@@ -1,4 +1,4 @@
 dependencies {
-	compileOnly project(":CoreAPI")
+	compile project(":CoreAPI")
 	testCompile(group: "junit", name:"junit", version:"4.12")
 }

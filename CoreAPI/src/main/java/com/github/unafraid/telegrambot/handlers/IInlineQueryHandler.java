@@ -21,15 +21,16 @@
  */
 package com.github.unafraid.telegrambot.handlers;
 
-import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery;
-import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import com.github.unafraid.telegrambot.bots.AbstractTelegramBot;
 
 /**
  * @author UnAfraid
  */
-public interface IInlineQueryHandler
+public interface IInlineQueryHandler extends ITelegramHandler
 {
 	/**
 	 * Fired whenever bot receives a callback query
@@ -39,5 +40,5 @@ public interface IInlineQueryHandler
 	 * @return {@code true} whenever this even has to be consumed, {@code false} to continue notified other handlers
 	 * @throws TelegramApiException the exception
 	 */
-	boolean onInlineQuery(AbsSender bot, Update update, InlineQuery query) throws TelegramApiException;
+	boolean onInlineQuery(AbstractTelegramBot bot, Update update, InlineQuery query) throws TelegramApiException;
 }

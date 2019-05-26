@@ -21,15 +21,16 @@
  */
 package com.github.unafraid.telegrambot.handlers;
 
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import com.github.unafraid.telegrambot.bots.AbstractTelegramBot;
 
 /**
  * @author UnAfraid
  */
-public interface ICancelHandler
+public interface ICancelHandler extends ITelegramHandler
 {
 	/**
 	 * Fired whenever user types in /cancel command to cancel the current action
@@ -38,5 +39,5 @@ public interface ICancelHandler
 	 * @param message the message
 	 * @throws TelegramApiException the exception
 	 */
-	void onCancel(AbsSender bot, Update update, Message message) throws TelegramApiException;
+	void onCancel(AbstractTelegramBot bot, Update update, Message message) throws TelegramApiException;
 }

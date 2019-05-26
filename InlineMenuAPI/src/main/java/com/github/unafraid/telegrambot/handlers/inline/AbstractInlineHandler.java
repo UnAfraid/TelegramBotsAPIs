@@ -22,17 +22,15 @@
 package com.github.unafraid.telegrambot.handlers.inline;
 
 import java.util.List;
+import java.util.Objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.telegram.telegrambots.api.methods.AnswerCallbackQuery;
-import org.telegram.telegrambots.api.objects.CallbackQuery;
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import com.github.unafraid.telegrambot.handlers.IAccessLevelHandler;
+import com.github.unafraid.telegrambot.bots.AbstractTelegramBot;
 import com.github.unafraid.telegrambot.handlers.ICallbackQueryHandler;
 import com.github.unafraid.telegrambot.handlers.ICancelHandler;
 import com.github.unafraid.telegrambot.handlers.ICommandHandler;
@@ -47,18 +45,16 @@ import com.github.unafraid.telegrambot.util.BotUtil;
 /**
  * @author UnAfraid
  */
-public abstract class AbstractInlineHandler implements ICommandHandler, IAccessLevelHandler, IMessageHandler, ICallbackQueryHandler, ICancelHandler
+public abstract class AbstractInlineHandler implements ICommandHandler, IMessageHandler, ICallbackQueryHandler, ICancelHandler
 {
-	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractInlineHandler.class);
-	
-	protected InlineMenu defaultMenu;
+	private volatile InlineMenu defaultMenu;
 	
 	public AbstractInlineHandler()
 	{
 		init();
 	}
 	
-	private final void init()
+	private void init()
 	{
 		final InlineContext ctx = new InlineContext();
 		final InlineMenuBuilder builder = new InlineMenuBuilder(ctx);
@@ -69,14 +65,8 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IAccessL
 	public abstract void registerMenu(InlineContext ctx, InlineMenuBuilder builder);
 	
 	@Override
-	public boolean onCallbackQuery(AbsSender bot, Update update, CallbackQuery query) throws TelegramApiException
+	public boolean onCallbackQuery(AbstractTelegramBot bot, Update update, CallbackQuery query) throws TelegramApiException
 	{
-		if (defaultMenu == null)
-		{
-			LOGGER.warn("{} has defaultMenu = null, did you call init() ?", this);
-			return false;
-		}
-		
 		final InlineUserData userData = defaultMenu.getContext().getUserData(query.getFrom().getId());
 		if (userData.getActiveMenu() == null)
 		{
@@ -119,7 +109,7 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IAccessL
 	}
 	
 	@Override
-	public void onCancel(AbsSender bot, Update update, Message message)
+	public void onCancel(AbstractTelegramBot bot, Update update, Message message)
 	{
 		if (defaultMenu != null)
 		{
@@ -128,14 +118,8 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IAccessL
 	}
 	
 	@Override
-	public void onCommandMessage(AbsSender bot, Update update, Message message, List<String> args) throws TelegramApiException
+	public void onCommandMessage(AbstractTelegramBot bot, Update update, Message message, List<String> args) throws TelegramApiException
 	{
-		if (defaultMenu == null)
-		{
-			LOGGER.warn("{} has defaultMenu = null", this);
-			return;
-		}
-		
 		final InlineUserData userData = defaultMenu.getContext().getUserData(message.getFrom().getId());
 		if (userData.getActiveMenu() == null)
 		{
@@ -152,7 +136,7 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IAccessL
 	}
 	
 	@Override
-	public boolean onMessage(AbsSender bot, Update update, Message message) throws TelegramApiException
+	public boolean onMessage(AbstractTelegramBot bot, Update update, Message message) throws TelegramApiException
 	{
 		if (defaultMenu == null)
 		{
@@ -178,7 +162,7 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IAccessL
 	{
 		//@formatter:off
 		return new InlineButtonBuilder(context)
-			.name("Close".intern())
+			.name("Close")
 			.forceOnNewRow()
 			.onQueryCallback(this::handleClose)
 			.build();
@@ -189,7 +173,7 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IAccessL
 	{
 		//@formatter:off
 		return new InlineButtonBuilder(context)
-			.name("Back".intern())
+			.name("Back")
 			.forceOnNewRow()
 			.onQueryCallback(this::handleBack)
 			.build();
@@ -200,7 +184,7 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IAccessL
 	{
 		//@formatter:off
 		return new InlineButtonBuilder(context)
-			.name("Back".intern())
+			.name("Back")
 			.forceOnNewRow()
 			.onQueryCallback(event -> 
 			{
@@ -212,18 +196,28 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IAccessL
 		//@formatter:on
 	}
 	
-	protected boolean handleClose(InlineCallbackEvent event) throws TelegramApiException
+	public boolean handleClose(InlineCallbackEvent event) throws TelegramApiException
 	{
 		event.getContext().clear(event.getQuery().getFrom().getId());
 		BotUtil.editMessage(event.getBot(), event.getQuery().getMessage(), String.format("Menu closed, type in %s  to open the menu again.", getCommand()), false, null);
 		return true;
 	}
 	
-	protected boolean handleBack(InlineCallbackEvent event) throws TelegramApiException
+	public boolean handleBack(InlineCallbackEvent event) throws TelegramApiException
 	{
 		final InlineUserData userData = event.getContext().getUserData(event.getQuery().getFrom().getId());
 		final InlineMenu targetMenu = userData.getActiveMenu().getParentMenu() != null ? userData.getActiveMenu().getParentMenu() : defaultMenu;
 		userData.editCurrentMenu(event.getBot(), event.getQuery().getMessage(), defaultMenu.getName(), InlineRowDefinedLayout.DEFAULT, targetMenu);
 		return true;
+	}
+	
+	public InlineMenu getDefaultMenu()
+	{
+		return defaultMenu;
+	}
+	
+	public void setDefaultMenu(InlineMenu defaultMenu)
+	{
+		this.defaultMenu = Objects.requireNonNull(defaultMenu, "Default menu cannot be null!");
 	}
 }

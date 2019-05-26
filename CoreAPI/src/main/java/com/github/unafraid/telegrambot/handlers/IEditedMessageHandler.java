@@ -21,15 +21,16 @@
  */
 package com.github.unafraid.telegrambot.handlers;
 
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import com.github.unafraid.telegrambot.bots.AbstractTelegramBot;
 
 /**
  * @author UnAfraid
  */
-public interface IEditedMessageHandler
+public interface IEditedMessageHandler extends ITelegramHandler
 {
 	/**
 	 * Fired whenever user types anything but a command
@@ -39,5 +40,5 @@ public interface IEditedMessageHandler
 	 * @return {@code true} if edit was successful, aborting notification to other handlers, {@code false} otherwise, continuing to look for handler that would return {@code true}
 	 * @throws TelegramApiException the exception
 	 */
-	boolean onEditMessage(AbsSender bot, Update update, Message message) throws TelegramApiException;
+	boolean onEditMessage(AbstractTelegramBot bot, Update update, Message message) throws TelegramApiException;
 }

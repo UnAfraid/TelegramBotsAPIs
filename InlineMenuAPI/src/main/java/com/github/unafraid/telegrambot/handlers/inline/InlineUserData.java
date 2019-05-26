@@ -24,10 +24,10 @@ package com.github.unafraid.telegrambot.handlers.inline;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.bots.AbsSender;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import com.github.unafraid.telegrambot.handlers.inline.layout.IInlineMenuLayout;
 import com.github.unafraid.telegrambot.util.BotUtil;

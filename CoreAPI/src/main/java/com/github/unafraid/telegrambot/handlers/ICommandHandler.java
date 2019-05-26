@@ -23,15 +23,16 @@ package com.github.unafraid.telegrambot.handlers;
 
 import java.util.List;
 
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import com.github.unafraid.telegrambot.bots.AbstractTelegramBot;
 
 /**
  * @author UnAfraid
  */
-public interface ICommandHandler
+public interface ICommandHandler extends ITelegramHandler
 {
 	/**
 	 * @return The command that will trigger @{link onCommandMessage} method
@@ -53,12 +54,7 @@ public interface ICommandHandler
 	 */
 	default String getCategory()
 	{
-		if (this instanceof IAccessLevelHandler)
-		{
-			IAccessLevelHandler accessLevelHandler = (IAccessLevelHandler) this;
-			return (accessLevelHandler.getRequiredAccessLevel() > 0) ? "Admin commands" : "Public commands";
-		}
-		return "Public commands";
+		return (getRequiredAccessLevel() > 0) ? "Protected [" + getRequiredAccessLevel() + " level] commands" : "Public commands";
 	}
 	
 	/**
@@ -69,5 +65,5 @@ public interface ICommandHandler
 	 * @param args the arguments after command separated by space or wrapped within "things here are considered one arg"
 	 * @throws TelegramApiException the exception
 	 */
-	void onCommandMessage(AbsSender bot, Update update, Message message, List<String> args) throws TelegramApiException;
+	void onCommandMessage(AbstractTelegramBot bot, Update update, Message message, List<String> args) throws TelegramApiException;
 }

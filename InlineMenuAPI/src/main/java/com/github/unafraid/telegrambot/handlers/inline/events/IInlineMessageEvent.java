@@ -21,7 +21,7 @@
  */
 package com.github.unafraid.telegrambot.handlers.inline.events;
 
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 /**
  * @author UnAfraid

@@ -24,8 +24,8 @@ package com.github.unafraid.telegrambot.handlers.inline.layout;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import com.github.unafraid.telegrambot.handlers.inline.InlineButton;
 

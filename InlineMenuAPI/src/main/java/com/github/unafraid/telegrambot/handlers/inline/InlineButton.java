@@ -23,7 +23,7 @@ package com.github.unafraid.telegrambot.handlers.inline;
 
 import java.util.UUID;
 
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import com.github.unafraid.telegrambot.handlers.inline.events.IInlineCallbackEvent;
 import com.github.unafraid.telegrambot.handlers.inline.events.IInlineMessageEvent;

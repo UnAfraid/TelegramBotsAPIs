@@ -21,15 +21,16 @@
  */
 package com.github.unafraid.telegrambot.handlers;
 
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.bots.DefaultAbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import com.github.unafraid.telegrambot.bots.AbstractTelegramBot;
 
 /**
  * @author UnAfraid
  */
-public interface IDocumentMessageHandler
+public interface IDocumentMessageHandler extends ITelegramHandler
 {
 	/**
 	 * Fired whenever user sends a document
@@ -39,5 +40,5 @@ public interface IDocumentMessageHandler
 	 * @return {@code true} if handler 'consumed' that event, aborting notification to other handlers, {@code false} otherwise, continuing to look for handler that would return {@code true}
 	 * @throws TelegramApiException the exception
 	 */
-	boolean onDocumentSent(DefaultAbsSender bot, Update update, Message message) throws TelegramApiException;
+	boolean onDocumentSent(AbstractTelegramBot bot, Update update, Message message) throws TelegramApiException;
 }

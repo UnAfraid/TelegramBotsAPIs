@@ -21,16 +21,16 @@
  */
 package com.github.unafraid.telegrambot.util;
 
-import org.telegram.telegrambots.api.methods.ActionType;
-import org.telegram.telegrambots.api.methods.send.SendChatAction;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.api.objects.CallbackQuery;
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.methods.ActionType;
+import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.bots.AbsSender;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import com.github.unafraid.telegrambot.handlers.ICommandHandler;
 
@@ -39,7 +39,7 @@ import com.github.unafraid.telegrambot.handlers.ICommandHandler;
  */
 public class BotUtil
 {
-	public static void sendAction(AbsSender bot, Message message, ActionType actionType) throws TelegramApiException
+	public static <T extends AbsSender> void sendAction(T bot, Message message, ActionType actionType) throws TelegramApiException
 	{
 		final SendChatAction sendAction = new SendChatAction();
 		sendAction.setChatId(Long.toString(message.getChat().getId()));
@@ -47,7 +47,7 @@ public class BotUtil
 		bot.execute(sendAction);
 	}
 	
-	public static void sendUsage(AbsSender bot, Message message, ICommandHandler handler) throws TelegramApiException
+	public static <T extends AbsSender> void sendUsage(T bot, Message message, ICommandHandler handler) throws TelegramApiException
 	{
 		final SendMessage msg = new SendMessage();
 		msg.setChatId(Long.toString(message.getChat().getId()));
@@ -55,7 +55,7 @@ public class BotUtil
 		bot.execute(msg);
 	}
 	
-	public static Message sendMessage(AbsSender bot, Message message, String text, boolean replyToMessage, boolean useMarkDown, ReplyKeyboard replayMarkup) throws TelegramApiException
+	public static <T extends AbsSender> Message sendMessage(T bot, Message message, String text, boolean replyToMessage, boolean useMarkDown, ReplyKeyboard replayMarkup) throws TelegramApiException
 	{
 		final SendMessage msg = new SendMessage();
 		msg.setChatId(Long.toString(message.getChat().getId()));
@@ -72,7 +72,7 @@ public class BotUtil
 		return bot.execute(msg);
 	}
 	
-	public static void sendHtmlMessage(AbsSender bot, Message message, String text, boolean replyToMessage, ReplyKeyboard replayMarkup) throws TelegramApiException
+	public static <T extends AbsSender> void sendHtmlMessage(T bot, Message message, String text, boolean replyToMessage, ReplyKeyboard replayMarkup) throws TelegramApiException
 	{
 		final SendMessage msg = new SendMessage();
 		msg.setChatId(Long.toString(message.getChat().getId()));
@@ -89,7 +89,7 @@ public class BotUtil
 		bot.execute(msg);
 	}
 	
-	public static void editMessage(AbsSender bot, Message message, String text, boolean useMarkDown, InlineKeyboardMarkup inlineMarkup) throws TelegramApiException
+	public static <T extends AbsSender> void editMessage(T bot, Message message, String text, boolean useMarkDown, InlineKeyboardMarkup inlineMarkup) throws TelegramApiException
 	{
 		final EditMessageText msg = new EditMessageText();
 		msg.setChatId(Long.toString(message.getChat().getId()));
@@ -100,7 +100,7 @@ public class BotUtil
 		bot.execute(msg);
 	}
 	
-	public static void editMessage(AbsSender bot, CallbackQuery query, String text, boolean useMarkDown, InlineKeyboardMarkup inlineMarkup) throws TelegramApiException
+	public static <T extends AbsSender> void editMessage(T bot, CallbackQuery query, String text, boolean useMarkDown, InlineKeyboardMarkup inlineMarkup) throws TelegramApiException
 	{
 		final EditMessageText msg = new EditMessageText();
 		msg.setChatId(Long.toString(query.getMessage().getChat().getId()));
