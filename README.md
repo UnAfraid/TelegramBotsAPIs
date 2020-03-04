@@ -12,24 +12,24 @@ This library depends on https://github.com/rubenlagus/TelegramBots, check it out
 <dependency>
     <groupId>com.github.unafraid.telegram-apis</groupId>
     <artifactId>CoreAPI</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/com.github.unafraid.telegram-apis/InlineMenuAPI -->
 <dependency>
     <groupId>com.github.unafraid.telegram-apis</groupId>
     <artifactId>InlineMenuAPI</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
 </dependency>
 ```
 
 # Gradle dependency
 ```gradle
 // https://mvnrepository.com/artifact/com.github.unafraid.telegram-apis/CoreAPI
-compile group: 'com.github.unafraid.telegram-apis', name: 'CoreAPI', version: '1.0.5'
+compile group: 'com.github.unafraid.telegram-apis', name: 'CoreAPI', version: '1.0.6'
 
 // https://mvnrepository.com/artifact/com.github.unafraid.telegram-apis/InlineMenuAPI
-compile group: 'com.github.unafraid.telegram-apis', name: 'InlineMenuAPI', version: '1.0.5'
+compile group: 'com.github.unafraid.telegram-apis', name: 'InlineMenuAPI', version: '1.0.6'
 ```
 
 In order to get started download the library from maven central as jar or maven/gradle dependency manager.
@@ -39,12 +39,12 @@ In order to get started download the library from maven central as jar or maven/
 import java.util.List;
 
 import org.telegram.telegrambots.ApiContextInitializer;
-import org.telegram.telegrambots.TelegramBotsApi;
-import org.telegram.telegrambots.api.methods.AnswerCallbackQuery;
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.api.objects.User;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import com.github.unafraid.telegrambot.bots.AbstractTelegramBot;
 import com.github.unafraid.telegrambot.bots.DefaultTelegramBot;
