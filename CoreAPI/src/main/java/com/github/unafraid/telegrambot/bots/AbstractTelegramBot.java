@@ -30,6 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.github.unafraid.telegrambot.handlers.IUpdateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -43,16 +44,22 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import com.github.unafraid.telegrambot.handlers.IAccessLevelValidator;
 import com.github.unafraid.telegrambot.handlers.ICallbackQueryHandler;
+import com.github.unafraid.telegrambot.handlers.IChannelPostHandler;
 import com.github.unafraid.telegrambot.handlers.IChosenInlineQueryHandler;
 import com.github.unafraid.telegrambot.handlers.ICommandHandler;
 import com.github.unafraid.telegrambot.handlers.IDocumentMessageHandler;
+import com.github.unafraid.telegrambot.handlers.IEditedChannelPostHandler;
 import com.github.unafraid.telegrambot.handlers.IEditedMessageHandler;
 import com.github.unafraid.telegrambot.handlers.IInlineQueryHandler;
 import com.github.unafraid.telegrambot.handlers.IMessageHandler;
 import com.github.unafraid.telegrambot.handlers.ITelegramHandler;
+import com.github.unafraid.telegrambot.handlers.IUnknownUpdateHandler;
 import com.github.unafraid.telegrambot.util.BotUtil;
 import com.github.unafraid.telegrambot.util.IThrowableFunction;
 
+/**
+ * @author UnAfraid
+ */
 public class AbstractTelegramBot extends TelegramLongPollingBot
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTelegramBot.class);
@@ -75,6 +82,22 @@ public class AbstractTelegramBot extends TelegramLongPollingBot
 	{
 		try
 		{
+			final List<IUpdateHandler> updateHandlers = getAvailableHandlers(IUpdateHandler.class);
+			for (IUpdateHandler updateHandler : updateHandlers)
+			{
+				try
+				{
+					if (updateHandler.onUpdate(this, update))
+					{
+						return;
+					}
+				}
+				catch (Exception ex)
+				{
+					LOGGER.error("Uncaught exception in onUpdate: {}", update, ex);
+				}
+			}
+			
 			if (update.hasChosenInlineQuery())
 			{
 				// Handle Chosen inline query
@@ -95,6 +118,16 @@ public class AbstractTelegramBot extends TelegramLongPollingBot
 				// Handle edited message
 				handleUpdate(IEditedMessageHandler.class, update, Update::getEditedMessage, Message::getFrom, handler -> handler.onEditMessage(this, update, update.getEditedMessage()));
 			}
+			else if (update.hasChannelPost())
+			{
+				// Handle channel post
+				handleUpdate(IChannelPostHandler.class, update, Update::getChannelPost, Message::getFrom, handler -> handler.onChannelPost(this, update, update.getChannelPost()));
+			}
+			else if (update.hasEditedChannelPost())
+			{
+				// Handle edited channel post
+				handleUpdate(IEditedChannelPostHandler.class, update, Update::getChannelPost, Message::getFrom, handler -> handler.onEditedChannelPost(this, update, update.getEditedChannelPost()));
+			}
 			else if (update.hasMessage())
 			{
 				if (update.getMessage().hasDocument())
@@ -109,7 +142,27 @@ public class AbstractTelegramBot extends TelegramLongPollingBot
 			}
 			else
 			{
-				LOGGER.warn("Update doesn't contains neither ChosenInlineQuery/InlineQuery/CallbackQuery/EditedMessage/Message Update: {}", update);
+				final List<IUnknownUpdateHandler> unknownHandlers = getAvailableHandlers(IUnknownUpdateHandler.class);
+				if (unknownHandlers.isEmpty())
+				{
+					LOGGER.warn("Update doesn't contains neither ChosenInlineQuery/InlineQuery/CallbackQuery/EditedMessage/ChannelPost/EditedChannelPost/Message Update: {}", update);
+					return;
+				}
+				
+				for (IUnknownUpdateHandler unknownHandler : unknownHandlers)
+				{
+					try
+					{
+						if (unknownHandler.onUnhandledUpdate(this, update))
+						{
+							return;
+						}
+					}
+					catch (Exception ex)
+					{
+						LOGGER.error("Uncaught exception in onUnhandledUpdate: {}", update, ex);
+					}
+				}
 			}
 		}
 		catch (Exception e)
@@ -335,6 +388,22 @@ public class AbstractTelegramBot extends TelegramLongPollingBot
 	public Collection<ITelegramHandler> getHandlers()
 	{
 		return Collections.unmodifiableCollection(handlers);
+	}
+	
+	/**
+	 * Returns a {@code List<T>} and verifies for access level if any of the handlers implements {@link ITelegramHandler}
+	 * @param clazz the class of the handler
+	 * @param <T> the type of the handler
+	 * @return {@code List<T>} with all handlers implementing the generic type provided
+	 */
+	public <T extends ITelegramHandler> List<T> getAvailableHandlers(Class<T> clazz)
+	{
+		//@formatter:off
+		return handlers.stream()
+				.filter(clazz::isInstance)
+				.map(clazz::cast)
+				.collect(Collectors.toList());
+		//@formatter:on
 	}
 	
 	/**
