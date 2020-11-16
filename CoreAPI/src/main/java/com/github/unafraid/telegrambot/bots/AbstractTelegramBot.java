@@ -30,7 +30,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import com.github.unafraid.telegrambot.handlers.IUpdateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -54,6 +53,7 @@ import com.github.unafraid.telegrambot.handlers.IInlineQueryHandler;
 import com.github.unafraid.telegrambot.handlers.IMessageHandler;
 import com.github.unafraid.telegrambot.handlers.ITelegramHandler;
 import com.github.unafraid.telegrambot.handlers.IUnknownUpdateHandler;
+import com.github.unafraid.telegrambot.handlers.IUpdateHandler;
 import com.github.unafraid.telegrambot.util.BotUtil;
 import com.github.unafraid.telegrambot.util.IThrowableFunction;
 

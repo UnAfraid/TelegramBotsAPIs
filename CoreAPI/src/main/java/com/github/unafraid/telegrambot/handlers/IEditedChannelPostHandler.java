@@ -21,10 +21,11 @@
  */
 package com.github.unafraid.telegrambot.handlers;
 
-import com.github.unafraid.telegrambot.bots.AbstractTelegramBot;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import com.github.unafraid.telegrambot.bots.AbstractTelegramBot;
 
 /**
  * @author UnAfraid
@@ -32,7 +33,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public interface IEditedChannelPostHandler extends ITelegramHandler
 {
 	/**
-	 * Fired whenever someone posts message within a channel
+	 * Fired whenever someone edits a message within a channel
 	 * @param bot the bot
 	 * @param update the update
 	 * @param message the message

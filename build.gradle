@@ -1,118 +1,118 @@
 subprojects {
-	apply plugin: "eclipse"
-	apply plugin: "java"
-	apply plugin: "maven"
-	apply plugin: "signing"
-	
-	sourceCompatibility = JavaVersion.VERSION_11
-		
-	group = "com.github.unafraid.telegram-apis"
-	version = "1.0.9"
-	
-	repositories {
-		mavenCentral()
-	}
-	
-	eclipse {
-		project {
-			natures("org.springsource.ide.eclipse.gradle.core.nature")
-		}
-	}
-	
-	tasks.eclipse.doLast {
-		copy {
-			from("../eclipse-settings")
-			into(".settings")
-		}
-	}
+    apply plugin: "eclipse"
+    apply plugin: "java"
+    apply plugin: "maven"
+    apply plugin: "signing"
 
-	tasks.cleanEclipse.doLast {
-		delete(".settings")
-	}
-	
-	tasks.withType(JavaCompile) {
-		options.encoding = "UTF-8"
-	}
+    sourceCompatibility = JavaVersion.VERSION_11
 
-	tasks.withType(Javadoc) {
-		options.addStringOption("Xdoclint:none", "-quiet")
-	}
-	
-	task javadocJar(type: Jar) {
-		classifier = "javadoc"
-		from javadoc
-	}
-	
-	task sourcesJar(type: Jar) {
-		classifier = "sources"
-		from sourceSets.main.allSource
-	}
-	
-	artifacts {
-		archives javadocJar, sourcesJar
-	}
-	
-	signing {
-		required { gradle.taskGraph.hasTask("uploadArchives") }
-		sign configurations.archives
-	}
-	
-	uploadArchives {
-		repositories {
-			mavenDeployer {
-				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-	
-				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
-					authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-				}
-	
-				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
-					authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-				}
-	
-				pom.project {
-					name project.name
-					packaging "jar"
-					description "Telegram Bots InlineMenu API"
-					url "https://github.com/UnAfraid/TelegramBotsAPIs"
-	
-					scm {
-						connection "scm:git:git@github.com:UnAfraid/TelegramBotsAPIs.git"
-						developerConnection "scm:git:git@github.com:UnAfraid/TelegramBotsAPIs.git"
-						url "git@github.com:UnAfraid/TelegramBotsAPIs.git"
-					}
-	
-					licenses {
-						license {
-							name "MIT License"
-							url "https://opensource.org/licenses/MIT"
-							distribution "repo"
-						}
-					}
-	
-					developers {
-						developer {
-							id "UnAfraid"
-							name "Rumen Nikiforov"
-							email "unafraid89@gmail.com"
-							organization "L2JUnity"
-							organizationUrl "https://l2junity.org"
-							roles {
-								role "architect"
-								role "developer"
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+    group = "com.github.unafraid.telegram-apis"
+    version = "1.0.9"
+
+    repositories {
+        mavenCentral()
+    }
+
+    eclipse {
+        project {
+            natures("org.springsource.ide.eclipse.gradle.core.nature")
+        }
+    }
+
+    tasks.eclipse.doLast {
+        copy {
+            from("../eclipse-settings")
+            into(".settings")
+        }
+    }
+
+    tasks.cleanEclipse.doLast {
+        delete(".settings")
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    tasks.withType(Javadoc) {
+        options.addStringOption("Xdoclint:none", "-quiet")
+    }
+
+    task javadocJar(type: Jar) {
+        classifier = "javadoc"
+        from javadoc
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier = "sources"
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives javadocJar, sourcesJar
+    }
+
+    signing {
+        required { gradle.taskGraph.hasTask("uploadArchives") }
+        sign configurations.archives
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
+                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                }
+
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                }
+
+                pom.project {
+                    name project.name
+                    packaging "jar"
+                    description "Telegram Bots InlineMenu API"
+                    url "https://github.com/UnAfraid/TelegramBotsAPIs"
+
+                    scm {
+                        connection "scm:git:git@github.com:UnAfraid/TelegramBotsAPIs.git"
+                        developerConnection "scm:git:git@github.com:UnAfraid/TelegramBotsAPIs.git"
+                        url "git@github.com:UnAfraid/TelegramBotsAPIs.git"
+                    }
+
+                    licenses {
+                        license {
+                            name "MIT License"
+                            url "https://opensource.org/licenses/MIT"
+                            distribution "repo"
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id "UnAfraid"
+                            name "Rumen Nikiforov"
+                            email "unafraid89@gmail.com"
+                            organization "L2JUnity"
+                            organizationUrl "https://l2junity.org"
+                            roles {
+                                role "architect"
+                                role "developer"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 def getRepositoryUsername() {
-	return hasProperty("ossrhUsername") ? ossrhUsername : ""
+    return hasProperty("ossrhUsername") ? ossrhUsername : ""
 }
 
 def getRepositoryPassword() {
-	return hasProperty("ossrhPassword") ? ossrhPassword : ""
+    return hasProperty("ossrhPassword") ? ossrhPassword : ""
 }
