@@ -80,6 +80,8 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IMessage
 			{
 				userData.setActiveButton(button);
 				final IInlineCallbackEvent event = button.getOnQueryCallback();
+				final AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+				answerCallbackQuery.setCallbackQueryId(query.getId());
 				if (event != null)
 				{
 					if (event.onCallbackEvent(new InlineCallbackEvent(button.getContext(), button, bot, update, query)))
@@ -87,7 +89,7 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IMessage
 						final InlineMenu subMenu = button.getSubMenu();
 						if (subMenu != null)
 						{
-							bot.execute(new AnswerCallbackQuery().setCallbackQueryId(query.getId()));
+							bot.execute(answerCallbackQuery);
 							userData.editCurrentMenu(bot, query.getMessage(), subMenu.getName() != null ? subMenu.getName() : "Sub menu", InlineRowDefinedLayout.DEFAULT, subMenu);
 						}
 						return true;
@@ -98,7 +100,7 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IMessage
 				final InlineMenu subMenu = button.getSubMenu();
 				if (subMenu != null)
 				{
-					bot.execute(new AnswerCallbackQuery().setCallbackQueryId(query.getId()));
+					bot.execute(answerCallbackQuery);
 					userData.editCurrentMenu(bot, query.getMessage(), subMenu.getName() != null ? subMenu.getName() : "Sub menu", InlineRowDefinedLayout.DEFAULT, subMenu);
 				}
 				return true;

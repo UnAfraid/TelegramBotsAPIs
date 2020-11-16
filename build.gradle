@@ -7,7 +7,7 @@ subprojects {
 	sourceCompatibility = JavaVersion.VERSION_11
 		
 	group = "com.github.unafraid.telegram-apis"
-	version = "1.0.8"
+	version = "1.0.9"
 	
 	repositories {
 		mavenCentral()
@@ -74,12 +74,12 @@ subprojects {
 					name project.name
 					packaging "jar"
 					description "Telegram Bots InlineMenu API"
-					url "https://github.com/UnAfraid/InlineMenus"
+					url "https://github.com/UnAfraid/TelegramBotsAPIs"
 	
 					scm {
-						connection "scm:git:git@github.com:UnAfraid/InlineMenus.git"
-						developerConnection "scm:git:git@github.com:UnAfraid/InlineMenus.git"
-						url "git@github.com:UnAfraid/InlineMenus.git"
+						connection "scm:git:git@github.com:UnAfraid/TelegramBotsAPIs.git"
+						developerConnection "scm:git:git@github.com:UnAfraid/TelegramBotsAPIs.git"
+						url "git@github.com:UnAfraid/TelegramBotsAPIs.git"
 					}
 	
 					licenses {

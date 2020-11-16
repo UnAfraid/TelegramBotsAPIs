@@ -122,6 +122,9 @@ public class InlineButton
 	 */
 	public InlineKeyboardButton createInlineKeyboardButton()
 	{
-		return new InlineKeyboardButton().setText(name).setCallbackData(uuid);
+		final InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
+		inlineKeyboardButton.setText(name);
+		inlineKeyboardButton.setCallbackData(uuid);
+		return inlineKeyboardButton;
 	}
 }
