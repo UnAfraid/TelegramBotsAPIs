@@ -45,6 +45,7 @@ public class InlineFixedButtonsPerRowLayout implements IInlineMenuLayout
 	public InlineKeyboardMarkup generateLayout(List<InlineButton> buttons)
 	{
 		final InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+		markup.setKeyboard(new ArrayList<>());
 		final List<List<InlineKeyboardButton>> keyboard = markup.getKeyboard();
 		buttons.forEach(uiButton ->
 		{

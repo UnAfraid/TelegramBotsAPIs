@@ -44,6 +44,7 @@ public class InlineRowDefinedLayout implements IInlineMenuLayout
 	public InlineKeyboardMarkup generateLayout(List<InlineButton> buttons)
 	{
 		final InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+		markup.setKeyboard(new ArrayList<>());
 		buttons.forEach(uiButton ->
 		{
 			final InlineKeyboardButton button = uiButton.createInlineKeyboardButton();
