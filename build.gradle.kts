@@ -1,6 +1,5 @@
 subprojects {
     apply(plugin = "java")
-    apply(plugin = "eclipse")
     apply(plugin = "maven-publish")
 
     configure<JavaPluginConvention> {
@@ -13,17 +12,6 @@ subprojects {
 
     repositories {
         mavenCentral()
-    }
-
-    tasks["eclipse"].doLast {
-        copy {
-            from("../eclipse-settings")
-            into(".settings")
-        }
-    }
-
-    tasks["cleanEclipse"].doLast {
-        delete(".settings")
     }
 
     tasks.withType<JavaCompile> {
