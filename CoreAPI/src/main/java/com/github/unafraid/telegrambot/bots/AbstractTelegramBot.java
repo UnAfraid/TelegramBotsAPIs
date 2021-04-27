@@ -383,7 +383,7 @@ public class AbstractTelegramBot extends TelegramLongPollingBot
 	}
 	
 	/**
-	 * @return {@link Collection <ICommandHandler>} the collection of ICommandHandler containing all currently registered handlers
+	 * @return {@code Collection<ICommandHandler>} the collection of ICommandHandler containing all currently registered handlers
 	 */
 	public Collection<ITelegramHandler> getHandlers()
 	{
