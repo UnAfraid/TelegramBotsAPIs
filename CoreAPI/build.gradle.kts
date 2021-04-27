@@ -30,6 +30,7 @@ publishing {
         create<MavenPublication>("maven") {
             from(components["java"])
             pom {
+                name.set(project.name)
                 description.set("Telegram Bots InlineMenu API")
                 url.set("https://github.com/UnAfraid/TelegramBotsAPIs")
 
@@ -66,9 +67,11 @@ signing {
 }
 
 fun getRepositoryUsername(): String {
-    return project.findProperty("ossrhUsername") as String
+    return project.findProperty("ossrhUsername") as String?
+            ?: ""
 }
 
 fun getRepositoryPassword(): String {
-    return project.findProperty("ossrhPassword") as String
+    return project.findProperty("ossrhPassword") as String?
+            ?: ""
 }

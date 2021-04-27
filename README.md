@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/UnAfraid/TelegramBotsAPIs.svg?branch=master)](https://travis-ci.org/UnAfraid/TelegramBotsAPIs)
+[![Build Status](https://github.com/UnAfraid/TelegramBotsAPIs/actions/workflows/test.yml/badge.svg)](https://github.com/UnAfraid/TelegramBotsAPIs/actions/workflows/test.yml)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/rubenlagus/TelegramBots/blob/master/LICENSE)
 
 # InlineMenus
@@ -12,24 +12,24 @@ This library depends on https://github.com/rubenlagus/TelegramBots, check it out
 <dependency>
     <groupId>com.github.unafraid.telegram-apis</groupId>
     <artifactId>CoreAPI</artifactId>
-    <version>1.0.10</version>
+    <version>1.0.11</version>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/com.github.unafraid.telegram-apis/InlineMenuAPI -->
 <dependency>
     <groupId>com.github.unafraid.telegram-apis</groupId>
     <artifactId>InlineMenuAPI</artifactId>
-    <version>1.0.10</version>
+    <version>1.0.11</version>
 </dependency>
 ```
 
 # Gradle dependency
 ```gradle
 // https://mvnrepository.com/artifact/com.github.unafraid.telegram-apis/CoreAPI
-compile group: 'com.github.unafraid.telegram-apis', name: 'CoreAPI', version: '1.0.10'
+implementation("com.github.unafraid.telegram-apis:CoreAPI:1.0.11")
 
 // https://mvnrepository.com/artifact/com.github.unafraid.telegram-apis/InlineMenuAPI
-compile group: 'com.github.unafraid.telegram-apis', name: 'InlineMenuAPI', version: '1.0.10'
+implementation("com.github.unafraid.telegram-apis:InlineMenuAPI:1.0.11")
 ```
 
 In order to get started download the library from maven central as jar or maven/gradle dependency manager.
