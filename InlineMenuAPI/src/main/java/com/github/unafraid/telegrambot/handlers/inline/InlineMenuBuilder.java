@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2017 Rumen Nikiforov <unafraid89@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,12 +21,11 @@
  */
 package com.github.unafraid.telegrambot.handlers.inline;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-
-import javax.validation.constraints.NotNull;
 
 import com.github.unafraid.telegrambot.handlers.inline.layout.IInlineMenuLayout;
 import com.github.unafraid.telegrambot.handlers.inline.layout.InlineRowDefinedLayout;
@@ -34,8 +33,7 @@ import com.github.unafraid.telegrambot.handlers.inline.layout.InlineRowDefinedLa
 /**
  * @author UnAfraid
  */
-public class InlineMenuBuilder
-{
+public class InlineMenuBuilder {
 	final InlineContext context;
 	String name;
 	InlineMenu parentMenu;
@@ -44,20 +42,20 @@ public class InlineMenuBuilder
 	
 	/**
 	 * Creates new inline menu builder
+	 *
 	 * @param context the context
 	 */
-	public InlineMenuBuilder(InlineContext context)
-	{
+	public InlineMenuBuilder(InlineContext context) {
 		this(context, null);
 	}
 	
 	/**
 	 * Creates new inline menu builder
-	 * @param context the inline context
+	 *
+	 * @param context    the inline context
 	 * @param parentMenu the parent menu
 	 */
-	public InlineMenuBuilder(@NotNull InlineContext context, InlineMenu parentMenu)
-	{
+	public InlineMenuBuilder(@NotNull InlineContext context, InlineMenu parentMenu) {
 		Objects.requireNonNull(context);
 		
 		this.context = context;
@@ -66,11 +64,11 @@ public class InlineMenuBuilder
 	
 	/**
 	 * Sets parent menu
+	 *
 	 * @param parentMenu the parent menu to set
 	 * @return this builder
 	 */
-	public InlineMenuBuilder parentMenu(@NotNull InlineMenu parentMenu)
-	{
+	public InlineMenuBuilder parentMenu(@NotNull InlineMenu parentMenu) {
 		Objects.requireNonNull(parentMenu);
 		
 		this.parentMenu = parentMenu;
@@ -79,11 +77,11 @@ public class InlineMenuBuilder
 	
 	/**
 	 * Sets name
+	 *
 	 * @param name the name to set
 	 * @return this builder
 	 */
-	public InlineMenuBuilder name(@NotNull String name)
-	{
+	public InlineMenuBuilder name(@NotNull String name) {
 		Objects.requireNonNull(name);
 		
 		this.name = name;
@@ -92,11 +90,11 @@ public class InlineMenuBuilder
 	
 	/**
 	 * Adds button
+	 *
 	 * @param button the button to add
 	 * @return this builder
 	 */
-	public InlineMenuBuilder button(@NotNull InlineButton button)
-	{
+	public InlineMenuBuilder button(@NotNull InlineButton button) {
 		Objects.requireNonNull(button);
 		
 		buttons.add(button);
@@ -105,11 +103,11 @@ public class InlineMenuBuilder
 	
 	/**
 	 * Adds collection of buttons
+	 *
 	 * @param buttons the buttons to add
 	 * @return this builder
 	 */
-	public InlineMenuBuilder buttons(@NotNull Collection<InlineButton> buttons)
-	{
+	public InlineMenuBuilder buttons(@NotNull Collection<InlineButton> buttons) {
 		Objects.requireNonNull(buttons);
 		
 		this.buttons.addAll(buttons);
@@ -118,11 +116,11 @@ public class InlineMenuBuilder
 	
 	/**
 	 * Sets layout to generate the menu with
+	 *
 	 * @param layout the layout
 	 * @return this builder
 	 */
-	public InlineMenuBuilder layout(@NotNull IInlineMenuLayout layout)
-	{
+	public InlineMenuBuilder layout(@NotNull IInlineMenuLayout layout) {
 		Objects.requireNonNull(layout);
 		
 		this.layout = layout;
@@ -132,8 +130,7 @@ public class InlineMenuBuilder
 	/**
 	 * @return the built inline menu
 	 */
-	public InlineMenu build()
-	{
+	public InlineMenu build() {
 		return new InlineMenu(this);
 	}
 }

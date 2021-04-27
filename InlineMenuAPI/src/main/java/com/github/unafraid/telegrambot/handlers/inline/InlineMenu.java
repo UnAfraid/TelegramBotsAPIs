@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2017 Rumen Nikiforov <unafraid89@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,8 +28,7 @@ import com.github.unafraid.telegrambot.handlers.inline.layout.IInlineMenuLayout;
 /**
  * @author UnAfraid
  */
-public class InlineMenu
-{
+public class InlineMenu {
 	private final InlineContext context;
 	private final String name;
 	private final InlineMenu parentMenu;
@@ -38,10 +37,10 @@ public class InlineMenu
 	
 	/**
 	 * Creates new inline menu
+	 *
 	 * @param builder the builder
 	 */
-	public InlineMenu(InlineMenuBuilder builder)
-	{
+	public InlineMenu(InlineMenuBuilder builder) {
 		this.context = builder.context;
 		this.name = builder.name;
 		this.parentMenu = builder.parentMenu;
@@ -52,40 +51,35 @@ public class InlineMenu
 	/**
 	 * @return the name
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 	
 	/**
 	 * @return the context
 	 */
-	public InlineContext getContext()
-	{
+	public InlineContext getContext() {
 		return context;
 	}
 	
 	/**
 	 * @return the parentMenu
 	 */
-	public InlineMenu getParentMenu()
-	{
+	public InlineMenu getParentMenu() {
 		return parentMenu;
 	}
 	
 	/**
 	 * @return the buttons
 	 */
-	public List<InlineButton> getButtons()
-	{
+	public List<InlineButton> getButtons() {
 		return buttons;
 	}
 	
 	/**
 	 * @return the layout
 	 */
-	public IInlineMenuLayout getLayout()
-	{
+	public IInlineMenuLayout getLayout() {
 		return layout;
 	}
 }

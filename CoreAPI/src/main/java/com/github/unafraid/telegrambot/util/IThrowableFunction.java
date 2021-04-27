@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2017 Rumen Nikiforov <unafraid89@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,12 +29,10 @@ import java.util.Objects;
  * @author UnAfraid
  */
 @FunctionalInterface
-public interface IThrowableFunction<T, R>
-{
+public interface IThrowableFunction<T, R> {
 	R apply(T var1) throws Exception;
 	
-	default <V> IThrowableFunction<V, R> compose(IThrowableFunction<? super V, ? extends T> var1)
-	{
+	default <V> IThrowableFunction<V, R> compose(IThrowableFunction<? super V, ? extends T> var1) {
 		Objects.requireNonNull(var1);
 		return (var2) ->
 		{
@@ -42,8 +40,7 @@ public interface IThrowableFunction<T, R>
 		};
 	}
 	
-	default <V> IThrowableFunction<T, V> andThen(IThrowableFunction<? super R, ? extends V> var1)
-	{
+	default <V> IThrowableFunction<T, V> andThen(IThrowableFunction<? super R, ? extends V> var1) {
 		Objects.requireNonNull(var1);
 		return (var2) ->
 		{
@@ -51,8 +48,7 @@ public interface IThrowableFunction<T, R>
 		};
 	}
 	
-	static <T> IThrowableFunction<T, T> identity()
-	{
+	static <T> IThrowableFunction<T, T> identity() {
 		return (var0) ->
 		{
 			return var0;

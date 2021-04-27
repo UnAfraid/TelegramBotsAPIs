@@ -24,13 +24,11 @@ package com.github.unafraid.telegrambot.handlers;
 /**
  * @author UnAfraid
  */
-public interface ITelegramHandler
-{
+public interface ITelegramHandler {
 	/**
 	 * @return The access level required to execute this command
 	 */
-	default int getRequiredAccessLevel()
-	{
+	default int getRequiredAccessLevel() {
 		return 0;
 	}
 }

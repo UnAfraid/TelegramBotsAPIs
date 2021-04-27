@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2017 Rumen Nikiforov <unafraid89@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,16 +23,14 @@ package com.github.unafraid.telegrambot.handlers.inline;
 
 import java.util.UUID;
 
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-
 import com.github.unafraid.telegrambot.handlers.inline.events.IInlineCallbackEvent;
 import com.github.unafraid.telegrambot.handlers.inline.events.IInlineMessageEvent;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 /**
  * @author UnAfraid
  */
-public class InlineButton
-{
+public class InlineButton {
 	private final InlineContext context;
 	private final String name;
 	private final int row;
@@ -44,10 +42,10 @@ public class InlineButton
 	
 	/**
 	 * Creates new Inline button from builder
+	 *
 	 * @param builder the builder
 	 */
-	public InlineButton(InlineButtonBuilder builder)
-	{
+	public InlineButton(InlineButtonBuilder builder) {
 		this.context = builder.context;
 		this.name = builder.name;
 		this.row = builder.row;
@@ -60,72 +58,63 @@ public class InlineButton
 	/**
 	 * @return the context
 	 */
-	public InlineContext getContext()
-	{
+	public InlineContext getContext() {
 		return context;
 	}
 	
 	/**
 	 * @return the name
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 	
 	/**
 	 * @return the row
 	 */
-	public int getRow()
-	{
+	public int getRow() {
 		return row;
 	}
 	
 	/**
 	 * @return the forceNewRow
 	 */
-	public boolean isForceNewRow()
-	{
+	public boolean isForceNewRow() {
 		return forceNewRow;
 	}
 	
 	/**
 	 * @return the onQueryCallback
 	 */
-	public IInlineCallbackEvent getOnQueryCallback()
-	{
+	public IInlineCallbackEvent getOnQueryCallback() {
 		return onQueryCallback;
 	}
 	
 	/**
 	 * @return the onInputMessage
 	 */
-	public IInlineMessageEvent getInputMessage()
-	{
+	public IInlineMessageEvent getInputMessage() {
 		return onInputMessage;
 	}
 	
 	/**
 	 * @return the subMenu
 	 */
-	public InlineMenu getSubMenu()
-	{
+	public InlineMenu getSubMenu() {
 		return subMenu;
 	}
 	
 	/**
 	 * @return the uuid
 	 */
-	public String getUUID()
-	{
+	public String getUUID() {
 		return uuid;
 	}
 	
 	/**
 	 * @return the {@link InlineKeyboardButton}
 	 */
-	public InlineKeyboardButton createInlineKeyboardButton()
-	{
+	public InlineKeyboardButton createInlineKeyboardButton() {
 		final InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
 		inlineKeyboardButton.setText(name);
 		inlineKeyboardButton.setCallbackData(uuid);

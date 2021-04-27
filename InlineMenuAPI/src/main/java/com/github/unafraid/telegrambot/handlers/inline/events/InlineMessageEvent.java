@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2017 Rumen Nikiforov <unafraid89@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,18 +21,16 @@
  */
 package com.github.unafraid.telegrambot.handlers.inline.events;
 
+import com.github.unafraid.telegrambot.handlers.inline.InlineButton;
+import com.github.unafraid.telegrambot.handlers.inline.InlineContext;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
-import com.github.unafraid.telegrambot.handlers.inline.InlineButton;
-import com.github.unafraid.telegrambot.handlers.inline.InlineContext;
-
 /**
  * @author UnAfraid
  */
-public class InlineMessageEvent
-{
+public class InlineMessageEvent {
 	private final InlineContext context;
 	private final InlineButton button;
 	private final AbsSender bot;
@@ -41,13 +39,12 @@ public class InlineMessageEvent
 	
 	/**
 	 * @param context the context
-	 * @param button the button
-	 * @param bot the bot
-	 * @param update the update received
+	 * @param button  the button
+	 * @param bot     the bot
+	 * @param update  the update received
 	 * @param message the message
 	 */
-	public InlineMessageEvent(InlineContext context, InlineButton button, AbsSender bot, Update update, Message message)
-	{
+	public InlineMessageEvent(InlineContext context, InlineButton button, AbsSender bot, Update update, Message message) {
 		this.context = context;
 		this.button = button;
 		this.bot = bot;
@@ -58,40 +55,35 @@ public class InlineMessageEvent
 	/**
 	 * @return the context
 	 */
-	public InlineContext getContext()
-	{
+	public InlineContext getContext() {
 		return context;
 	}
 	
 	/**
 	 * @return the button
 	 */
-	public InlineButton getButton()
-	{
+	public InlineButton getButton() {
 		return button;
 	}
 	
 	/**
 	 * @return the bot
 	 */
-	public AbsSender getBot()
-	{
+	public AbsSender getBot() {
 		return bot;
 	}
 	
 	/**
 	 * @return the update
 	 */
-	public Update getUpdate()
-	{
+	public Update getUpdate() {
 		return update;
 	}
 	
 	/**
 	 * @return the query
 	 */
-	public Message getMessage()
-	{
+	public Message getMessage() {
 		return message;
 	}
 }
