@@ -23,6 +23,10 @@ package com.github.unafraid.telegrambot.handlers.inline;
 
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import javax.validation.constraints.NotNull;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -34,25 +38,31 @@ import com.github.unafraid.telegrambot.util.BotUtil;
 import com.github.unafraid.telegrambot.util.MapUtil;
 
 /**
+ * This class is thread-safe
  * @author UnAfraid
  */
 public class InlineUserData
 {
-	private final int id;
+	private final long id;
 	private final MapUtil params = new MapUtil(new ConcurrentHashMap<>());
 	private InlineMenu activeMenu;
 	private InlineButton activeButton;
-	private int state;
+	private final AtomicInteger state = new AtomicInteger();
+	private final ReentrantReadWriteLock activeLock = new ReentrantReadWriteLock();
 	
-	public InlineUserData(int id)
+	/**
+	 * Creates new inline user data instance
+	 * @param id user id
+	 */
+	public InlineUserData(long id)
 	{
 		this.id = id;
 	}
 	
 	/**
-	 * @return the id
+	 * @return the user id
 	 */
-	public int getId()
+	public long getId()
 	{
 		return id;
 	}
@@ -62,7 +72,7 @@ public class InlineUserData
 	 */
 	public int getState()
 	{
-		return state;
+		return state.get();
 	}
 	
 	/**
@@ -70,7 +80,17 @@ public class InlineUserData
 	 */
 	public void setState(int state)
 	{
-		this.state = state;
+		this.state.set(state);
+	}
+	
+	/**
+	 * @param expectedState the expected state
+	 * @param newState the new state to set
+	 * @return {@code true} if atomic operation succeeded, {@code false} otherwise
+	 */
+	public boolean setCompareAndSetState(int expectedState, int newState)
+	{
+		return this.state.compareAndSet(expectedState, newState);
 	}
 	
 	/**
@@ -78,7 +98,15 @@ public class InlineUserData
 	 */
 	public InlineMenu getActiveMenu()
 	{
-		return activeMenu;
+		activeLock.readLock().lock();
+		try
+		{
+			return activeMenu;
+		}
+		finally
+		{
+			activeLock.readLock().unlock();
+		}
 	}
 	
 	/**
@@ -86,7 +114,15 @@ public class InlineUserData
 	 */
 	public void setActiveMenu(InlineMenu activeMenu)
 	{
-		this.activeMenu = activeMenu;
+		activeLock.writeLock().lock();
+		try
+		{
+			this.activeMenu = activeMenu;
+		}
+		finally
+		{
+			activeLock.writeLock().unlock();
+		}
 	}
 	
 	/**
@@ -94,7 +130,15 @@ public class InlineUserData
 	 */
 	public InlineButton getActiveButton()
 	{
-		return activeButton;
+		activeLock.readLock().lock();
+		try
+		{
+			return activeButton;
+		}
+		finally
+		{
+			activeLock.readLock().unlock();
+		}
 	}
 	
 	/**
@@ -102,7 +146,15 @@ public class InlineUserData
 	 */
 	public void setActiveButton(InlineButton activeButton)
 	{
-		this.activeButton = activeButton;
+		activeLock.writeLock().lock();
+		try
+		{
+			this.activeButton = activeButton;
+		}
+		finally
+		{
+			activeLock.writeLock().unlock();
+		}
 	}
 	
 	/**
@@ -115,16 +167,21 @@ public class InlineUserData
 	
 	/**
 	 * Sends the InlineMenu to message's chat
-	 * @param bot
-	 * @param message
-	 * @param text
-	 * @param layout
-	 * @param menu
-	 * @throws TelegramApiException
+	 * @param bot the bot instance
+	 * @param message the update message
+	 * @param text the text
+	 * @param layout the layout of the menu
+	 * @param menu the menu
+	 * @throws TelegramApiException in case of an error
 	 */
-	public void sendMenu(AbsSender bot, Message message, String text, IInlineMenuLayout layout, InlineMenu menu) throws TelegramApiException
+	public void sendMenu(@NotNull AbsSender bot, @NotNull Message message, @NotNull String text, @NotNull IInlineMenuLayout layout, @NotNull InlineMenu menu) throws TelegramApiException
 	{
+		Objects.requireNonNull(bot);
+		Objects.requireNonNull(message);
+		Objects.requireNonNull(text);
+		Objects.requireNonNull(layout);
 		Objects.requireNonNull(menu);
+		
 		activeMenu = menu;
 		final InlineKeyboardMarkup markup = layout.generateLayout(activeMenu.getButtons());
 		BotUtil.sendMessage(bot, message, text, false, true, markup);
@@ -132,20 +189,26 @@ public class InlineUserData
 	
 	/**
 	 * Edits current message with the new text and menu
-	 * @param bot
-	 * @param message
-	 * @param text
-	 * @param layout
-	 * @param menu
-	 * @throws TelegramApiException
+	 * @param bot the bot instance
+	 * @param message the update message
+	 * @param text the text
+	 * @param layout the layout of the menu
+	 * @param menu the menu
+	 * @throws TelegramApiException in case of an error
 	 */
-	public void editCurrentMenu(AbsSender bot, Message message, String text, IInlineMenuLayout layout, InlineMenu menu) throws TelegramApiException
+	public void editCurrentMenu(@NotNull AbsSender bot, @NotNull Message message, @NotNull String text, @NotNull IInlineMenuLayout layout, @NotNull InlineMenu menu) throws TelegramApiException
 	{
+		Objects.requireNonNull(bot);
+		Objects.requireNonNull(message);
+		Objects.requireNonNull(text);
+		Objects.requireNonNull(layout);
 		Objects.requireNonNull(menu);
-		if ((text == null) || text.trim().isEmpty())
+		
+		if (text.trim().isEmpty())
 		{
 			throw new IllegalStateException("Menu's name should be non empty!");
 		}
+		
 		activeMenu = menu;
 		final InlineKeyboardMarkup markup = layout.generateLayout(activeMenu.getButtons());
 		BotUtil.editMessage(bot, message, text, true, markup);
@@ -153,15 +216,19 @@ public class InlineUserData
 	
 	/**
 	 * Edits the message sets menu.getName as text of the message and renders the menu specified
-	 * @param bot
-	 * @param message
-	 * @param layout
-	 * @param menu
-	 * @throws TelegramApiException
+	 * @param bot the bot instance
+	 * @param message the update message
+	 * @param layout the layout of the menu
+	 * @param menu the menu
+	 * @throws TelegramApiException in case of an error
 	 */
 	public void editCurrentMenu(AbsSender bot, Message message, IInlineMenuLayout layout, InlineMenu menu) throws TelegramApiException
 	{
+		Objects.requireNonNull(bot);
+		Objects.requireNonNull(message);
+		Objects.requireNonNull(layout);
 		Objects.requireNonNull(menu);
+		
 		editCurrentMenu(bot, message, menu.getName(), layout, menu);
 	}
 }

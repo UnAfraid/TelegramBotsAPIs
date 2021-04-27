@@ -34,6 +34,9 @@ import com.github.unafraid.telegrambot.handlers.inline.InlineButton;
  */
 public class InlineRowDefinedLayout implements IInlineMenuLayout
 {
+	/**
+	 * The default Inline Row Defined layout
+	 */
 	public static final InlineRowDefinedLayout DEFAULT = new InlineRowDefinedLayout();
 	
 	private InlineRowDefinedLayout()

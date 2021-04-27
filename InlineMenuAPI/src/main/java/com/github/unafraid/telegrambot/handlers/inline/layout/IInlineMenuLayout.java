@@ -32,5 +32,9 @@ import com.github.unafraid.telegrambot.handlers.inline.InlineButton;
  */
 public interface IInlineMenuLayout
 {
+	/**
+	 * @param buttons the buttons to generate the menu with
+	 * @return the generated markup
+	 */
 	InlineKeyboardMarkup generateLayout(List<InlineButton> buttons);
 }

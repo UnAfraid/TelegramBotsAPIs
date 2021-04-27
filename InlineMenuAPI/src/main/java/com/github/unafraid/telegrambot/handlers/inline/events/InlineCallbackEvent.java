@@ -40,11 +40,11 @@ public class InlineCallbackEvent
 	private final CallbackQuery query;
 	
 	/**
-	 * @param context
-	 * @param button
-	 * @param bot
-	 * @param update
-	 * @param query
+	 * @param context the context
+	 * @param button the button
+	 * @param bot the bot
+	 * @param update the update received
+	 * @param query the query received
 	 */
 	public InlineCallbackEvent(InlineContext context, InlineButton button, AbsSender bot, Update update, CallbackQuery query)
 	{

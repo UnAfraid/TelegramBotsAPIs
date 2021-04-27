@@ -74,10 +74,9 @@ public final class MapUtil
 	
 	/**
 	 * Puts key-value pair inside the internal map, replacing previously existing key
-	 * @param name
-	 * @param value
-	 * @return the same instance of current MapSet so it can be chained like:<br />
-	 *         mapSet.put("key", "value").put("another key", "another value");
+	 * @param name String designating the key in the set
+	 * @param value value associated to the key
+	 * @return the same instance of current MapSet so it can be chained like: mapSet.put("key", "value").put("another key", "another value");
 	 */
 	public MapUtil put(String name, Object value)
 	{
@@ -102,11 +101,11 @@ public final class MapUtil
 		}
 		if (val instanceof Boolean)
 		{
-			return ((Boolean) val).booleanValue();
+			return (Boolean) val;
 		}
 		try
 		{
-			return Boolean.valueOf((String) val);
+			return Boolean.parseBoolean((String) val);
 		}
 		catch (Exception e)
 		{
@@ -129,11 +128,11 @@ public final class MapUtil
 		}
 		if (val instanceof Boolean)
 		{
-			return ((Boolean) val).booleanValue();
+			return (Boolean) val;
 		}
 		try
 		{
-			return Boolean.valueOf((String) val);
+			return Boolean.parseBoolean((String) val);
 		}
 		catch (Exception e)
 		{
@@ -160,7 +159,7 @@ public final class MapUtil
 		}
 		try
 		{
-			return Byte.valueOf((String) val);
+			return Byte.parseByte((String) val);
 		}
 		catch (Exception e)
 		{
@@ -186,7 +185,7 @@ public final class MapUtil
 		}
 		try
 		{
-			return Byte.valueOf((String) val);
+			return Byte.parseByte((String) val);
 		}
 		catch (Exception e)
 		{
@@ -213,7 +212,7 @@ public final class MapUtil
 		}
 		try
 		{
-			return Short.valueOf((String) val);
+			return Short.parseShort((String) val);
 		}
 		catch (Exception e)
 		{
@@ -239,7 +238,7 @@ public final class MapUtil
 		}
 		try
 		{
-			return Short.valueOf((String) val);
+			return Short.parseShort((String) val);
 		}
 		catch (Exception e)
 		{
@@ -265,7 +264,7 @@ public final class MapUtil
 		}
 		try
 		{
-			return Integer.valueOf((String) val);
+			return Integer.parseInt((String) val);
 		}
 		catch (Exception e)
 		{
@@ -292,7 +291,7 @@ public final class MapUtil
 		}
 		try
 		{
-			return Integer.valueOf((String) val);
+			return Integer.parseInt((String) val);
 		}
 		catch (Exception e)
 		{
@@ -303,7 +302,7 @@ public final class MapUtil
 	/**
 	 * Returns the int[] associated to the key put in parameter ("name"). If the value associated to the key is null, this method returns the value of the parameter defaultValue.
 	 * @param name : String designating the key in the set
-	 * @param delimiter
+	 * @param delimiter the delimiter
 	 * @return int[] : value associated to the key
 	 */
 	public int[] getIntArray(String name, String delimiter)
@@ -315,11 +314,10 @@ public final class MapUtil
 		}
 		if (val instanceof Number)
 		{
-			int[] result =
+			return new int[]
 			{
 				((Number) val).intValue()
 			};
-			return result;
 		}
 		
 		int c = 0;
@@ -329,7 +327,7 @@ public final class MapUtil
 		{
 			try
 			{
-				result[c++] = Integer.valueOf(v);
+				result[c++] = Integer.parseInt(v);
 			}
 			catch (Exception e)
 			{
@@ -348,11 +346,10 @@ public final class MapUtil
 		}
 		if (val instanceof Number)
 		{
-			float[] result =
+			return new float[]
 			{
 				((Number) val).floatValue()
 			};
-			return result;
 		}
 		int c = 0;
 		String[] vals = ((String) val).split(delimiter);
@@ -361,7 +358,7 @@ public final class MapUtil
 		{
 			try
 			{
-				result[c++] = Float.valueOf(v);
+				result[c++] = Float.parseFloat(v);
 			}
 			catch (Exception e)
 			{
@@ -389,7 +386,7 @@ public final class MapUtil
 		}
 		try
 		{
-			return Long.valueOf((String) val);
+			return Long.parseLong((String) val);
 		}
 		catch (Exception e)
 		{
@@ -416,7 +413,7 @@ public final class MapUtil
 		}
 		try
 		{
-			return Long.valueOf((String) val);
+			return Long.parseLong((String) val);
 		}
 		catch (Exception e)
 		{
@@ -442,7 +439,7 @@ public final class MapUtil
 		}
 		try
 		{
-			return Float.valueOf((String) val);
+			return Float.parseFloat((String) val);
 		}
 		catch (Exception e)
 		{
@@ -469,7 +466,7 @@ public final class MapUtil
 		}
 		try
 		{
-			return Float.valueOf((String) val);
+			return Float.parseFloat((String) val);
 		}
 		catch (Exception e)
 		{
@@ -495,7 +492,7 @@ public final class MapUtil
 		}
 		try
 		{
-			return Double.valueOf((String) val);
+			return Double.parseDouble((String) val);
 		}
 		catch (Exception e)
 		{
@@ -522,7 +519,7 @@ public final class MapUtil
 		}
 		try
 		{
-			return Double.valueOf((String) val);
+			return Double.parseDouble((String) val);
 		}
 		catch (Exception e)
 		{
@@ -566,7 +563,7 @@ public final class MapUtil
 	 * @param <T> : Class of the enumeration returned
 	 * @param name : String designating the key in the set
 	 * @param enumClass : Class designating the class of the value associated with the key in the set
-	 * @return Enum<T>
+	 * @return enum of type T
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Enum<T>> T getEnum(String name, Class<T> enumClass)
@@ -595,8 +592,8 @@ public final class MapUtil
 	 * @param <T> : Class of the enumeration returned
 	 * @param name : String designating the key in the set
 	 * @param enumClass : Class designating the class of the value associated with the key in the set
-	 * @param defaultValue : <T> designating the value by default
-	 * @return Enum<T>
+	 * @param defaultValue : T designating the value by default
+	 * @return enum of type T
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Enum<T>> T getEnum(String name, Class<T> enumClass, T defaultValue)
@@ -638,7 +635,7 @@ public final class MapUtil
 		Objects.requireNonNull(key);
 		Objects.requireNonNull(clazz);
 		final Object obj = values.get(key);
-		if ((obj == null) || !(obj instanceof List<?>))
+		if (!(obj instanceof List<?>))
 		{
 			return null;
 		}
@@ -716,7 +713,7 @@ public final class MapUtil
 	public <T extends Enum<T>> List<T> getEnumList(String key, Class<T> clazz)
 	{
 		final Object obj = values.get(key);
-		if ((obj == null) || !(obj instanceof List<?>))
+		if (!(obj instanceof List<?>))
 		{
 			return null;
 		}
@@ -737,7 +734,7 @@ public final class MapUtil
 	public <T extends Enum<T>> Set<T> getEnumSet(String key, Class<T> clazz)
 	{
 		final Object obj = values.get(key);
-		if ((obj == null) || !(obj instanceof List<?>))
+		if (!(obj instanceof List<?>))
 		{
 			return null;
 		}
@@ -754,12 +751,6 @@ public final class MapUtil
 		return (Set<T>) obj;
 	}
 	
-	/**
-	 * @param <T>
-	 * @param originalList
-	 * @param clazz
-	 * @return
-	 */
 	private <T> List<T> convertList(List<Object> originalList, Class<T> clazz)
 	{
 		if (clazz == Integer.class)
@@ -786,12 +777,6 @@ public final class MapUtil
 		return null;
 	}
 	
-	/**
-	 * @param <T>
-	 * @param originalSet
-	 * @param clazz
-	 * @return
-	 */
 	private <T> Set<T> convertSet(Set<Object> originalSet, Class<T> clazz)
 	{
 		if (clazz == Integer.class)
@@ -822,7 +807,7 @@ public final class MapUtil
 	public <K, V> Map<K, V> getMap(String key, Class<K> keyClass, Class<V> valueClass)
 	{
 		final Object obj = values.get(key);
-		if ((obj == null) || !(obj instanceof Map<?, ?>))
+		if (!(obj instanceof Map<?, ?>))
 		{
 			return null;
 		}
@@ -842,7 +827,7 @@ public final class MapUtil
 	public <K, V> Map<K, List<V>> getMapOfList(String key, Class<K> keyClass, Class<V> valueClass)
 	{
 		final Object obj = values.get(key);
-		if ((obj == null) || !(obj instanceof Map<?, ?>))
+		if (!(obj instanceof Map<?, ?>))
 		{
 			return null;
 		}

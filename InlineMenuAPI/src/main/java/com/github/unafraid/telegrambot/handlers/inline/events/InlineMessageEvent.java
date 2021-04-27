@@ -40,11 +40,11 @@ public class InlineMessageEvent
 	private final Message message;
 	
 	/**
-	 * @param context
-	 * @param button
-	 * @param bot
-	 * @param update
-	 * @param message
+	 * @param context the context
+	 * @param button the button
+	 * @param bot the bot
+	 * @param update the update received
+	 * @param message the message
 	 */
 	public InlineMessageEvent(InlineContext context, InlineButton button, AbsSender bot, Update update, Message message)
 	{

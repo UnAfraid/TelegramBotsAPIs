@@ -42,6 +42,10 @@ public class InlineButton
 	private final InlineMenu subMenu;
 	private final String uuid = UUID.randomUUID().toString();
 	
+	/**
+	 * Creates new Inline button from builder
+	 * @param builder the builder
+	 */
 	public InlineButton(InlineButtonBuilder builder)
 	{
 		this.context = builder.context;

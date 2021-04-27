@@ -36,6 +36,10 @@ public class InlineFixedButtonsPerRowLayout implements IInlineMenuLayout
 {
 	private final int maxButtonsPerRow;
 	
+	/**
+	 * Creates new Inline Fixed Buttons per row layout
+	 * @param maxButtonsPerRow buttons per row
+	 */
 	public InlineFixedButtonsPerRowLayout(int maxButtonsPerRow)
 	{
 		this.maxButtonsPerRow = maxButtonsPerRow;

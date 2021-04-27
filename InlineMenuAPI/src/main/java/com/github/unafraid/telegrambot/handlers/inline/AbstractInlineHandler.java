@@ -39,7 +39,6 @@ import com.github.unafraid.telegrambot.handlers.inline.events.IInlineCallbackEve
 import com.github.unafraid.telegrambot.handlers.inline.events.IInlineMessageEvent;
 import com.github.unafraid.telegrambot.handlers.inline.events.InlineCallbackEvent;
 import com.github.unafraid.telegrambot.handlers.inline.events.InlineMessageEvent;
-import com.github.unafraid.telegrambot.handlers.inline.layout.InlineRowDefinedLayout;
 import com.github.unafraid.telegrambot.util.BotUtil;
 
 /**
@@ -47,13 +46,19 @@ import com.github.unafraid.telegrambot.util.BotUtil;
  */
 public abstract class AbstractInlineHandler implements ICommandHandler, IMessageHandler, ICallbackQueryHandler, ICancelHandler
 {
-	private volatile InlineMenu defaultMenu;
+	private InlineMenu defaultMenu;
 	
+	/**
+	 * Calls init to register the default menu
+	 */
 	public AbstractInlineHandler()
 	{
 		init();
 	}
 	
+	/**
+	 * Registers the default menu
+	 */
 	private void init()
 	{
 		final InlineContext ctx = new InlineContext();
@@ -62,6 +67,11 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IMessage
 		defaultMenu = builder.build();
 	}
 	
+	/**
+	 * Registers menu to this inline handler
+	 * @param ctx context
+	 * @param builder builder
+	 */
 	public abstract void registerMenu(InlineContext ctx, InlineMenuBuilder builder);
 	
 	@Override
@@ -90,7 +100,7 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IMessage
 						if (subMenu != null)
 						{
 							bot.execute(answerCallbackQuery);
-							userData.editCurrentMenu(bot, query.getMessage(), subMenu.getName() != null ? subMenu.getName() : "Sub menu", InlineRowDefinedLayout.DEFAULT, subMenu);
+							userData.editCurrentMenu(bot, query.getMessage(), subMenu.getName() != null ? subMenu.getName() : "Sub menu", subMenu.getLayout(), subMenu);
 						}
 						return true;
 					}
@@ -101,7 +111,7 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IMessage
 				if (subMenu != null)
 				{
 					bot.execute(answerCallbackQuery);
-					userData.editCurrentMenu(bot, query.getMessage(), subMenu.getName() != null ? subMenu.getName() : "Sub menu", InlineRowDefinedLayout.DEFAULT, subMenu);
+					userData.editCurrentMenu(bot, query.getMessage(), subMenu.getName() != null ? subMenu.getName() : "Sub menu", subMenu.getLayout(), subMenu);
 				}
 				return true;
 			}
@@ -134,7 +144,7 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IMessage
 			return;
 		}
 		
-		userData.sendMenu(bot, message, activeMenu.getName() != null ? activeMenu.getName() : "Menu", InlineRowDefinedLayout.DEFAULT, activeMenu);
+		userData.sendMenu(bot, message, activeMenu.getName() != null ? activeMenu.getName() : "Menu", activeMenu.getLayout(), activeMenu);
 	}
 	
 	@Override
@@ -160,6 +170,11 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IMessage
 		return false;
 	}
 	
+	/**
+	 * Creates generic default close button
+	 * @param context the context
+	 * @return new inline button
+	 */
 	public InlineButton defaultClose(InlineContext context)
 	{
 		//@formatter:off
@@ -171,6 +186,11 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IMessage
 		//@formatter:on
 	}
 	
+	/**
+	 * Creates generic default back button
+	 * @param context the context
+	 * @return new inline button
+	 */
 	public InlineButton defaultBack(InlineContext context)
 	{
 		//@formatter:off
@@ -182,6 +202,12 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IMessage
 		//@formatter:on
 	}
 	
+	/**
+	 * Creates default back button
+	 * @param context the context
+	 * @param targetMenu the target menu
+	 * @return new inline button
+	 */
 	public InlineButton defaultBack(InlineContext context, InlineMenu targetMenu)
 	{
 		//@formatter:off
@@ -191,13 +217,19 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IMessage
 			.onQueryCallback(event -> 
 			{
 				final InlineUserData userData = event.getContext().getUserData(event.getQuery().getFrom().getId());
-				userData.editCurrentMenu(event.getBot(), event.getQuery().getMessage(), defaultMenu.getName(), InlineRowDefinedLayout.DEFAULT, targetMenu);
+				userData.editCurrentMenu(event.getBot(), event.getQuery().getMessage(), defaultMenu.getName(), targetMenu.getLayout(), targetMenu);
 				return true;
 			})
 			.build();
 		//@formatter:on
 	}
 	
+	/**
+	 * Handles close button
+	 * @param event the callback event
+	 * @return true
+	 * @throws TelegramApiException in case of error
+	 */
 	public boolean handleClose(InlineCallbackEvent event) throws TelegramApiException
 	{
 		event.getContext().clear(event.getQuery().getFrom().getId());
@@ -205,19 +237,32 @@ public abstract class AbstractInlineHandler implements ICommandHandler, IMessage
 		return true;
 	}
 	
+	/**
+	 * Handles back button
+	 * @param event the callback event
+	 * @return true
+	 * @throws TelegramApiException in case of error
+	 */
 	public boolean handleBack(InlineCallbackEvent event) throws TelegramApiException
 	{
 		final InlineUserData userData = event.getContext().getUserData(event.getQuery().getFrom().getId());
 		final InlineMenu targetMenu = userData.getActiveMenu().getParentMenu() != null ? userData.getActiveMenu().getParentMenu() : defaultMenu;
-		userData.editCurrentMenu(event.getBot(), event.getQuery().getMessage(), defaultMenu.getName(), InlineRowDefinedLayout.DEFAULT, targetMenu);
+		userData.editCurrentMenu(event.getBot(), event.getQuery().getMessage(), defaultMenu.getName(), targetMenu.getLayout(), targetMenu);
 		return true;
 	}
 	
+	/**
+	 * @return the default menu
+	 */
 	public InlineMenu getDefaultMenu()
 	{
 		return defaultMenu;
 	}
 	
+	/**
+	 * Sets the default menu
+	 * @param defaultMenu the default menu
+	 */
 	public void setDefaultMenu(InlineMenu defaultMenu)
 	{
 		this.defaultMenu = Objects.requireNonNull(defaultMenu, "Default menu cannot be null!");

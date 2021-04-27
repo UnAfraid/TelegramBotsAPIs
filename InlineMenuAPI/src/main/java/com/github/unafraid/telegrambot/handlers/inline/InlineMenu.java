@@ -23,22 +23,30 @@ package com.github.unafraid.telegrambot.handlers.inline;
 
 import java.util.List;
 
+import com.github.unafraid.telegrambot.handlers.inline.layout.IInlineMenuLayout;
+
 /**
  * @author UnAfraid
  */
 public class InlineMenu
 {
 	private final InlineContext context;
-	private String name;
+	private final String name;
 	private final InlineMenu parentMenu;
 	private final List<InlineButton> buttons;
+	private final IInlineMenuLayout layout;
 	
+	/**
+	 * Creates new inline menu
+	 * @param builder the builder
+	 */
 	public InlineMenu(InlineMenuBuilder builder)
 	{
 		this.context = builder.context;
 		this.name = builder.name;
 		this.parentMenu = builder.parentMenu;
 		this.buttons = builder.buttons;
+		this.layout = builder.layout;
 	}
 	
 	/**
@@ -47,14 +55,6 @@ public class InlineMenu
 	public String getName()
 	{
 		return name;
-	}
-	
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name)
-	{
-		this.name = name;
 	}
 	
 	/**
@@ -79,5 +79,13 @@ public class InlineMenu
 	public List<InlineButton> getButtons()
 	{
 		return buttons;
+	}
+	
+	/**
+	 * @return the layout
+	 */
+	public IInlineMenuLayout getLayout()
+	{
+		return layout;
 	}
 }
