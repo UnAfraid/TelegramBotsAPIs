@@ -24,8 +24,8 @@ package com.github.unafraid.telegrambot.util;
 import java.util.Objects;
 
 /**
- * @param <T>
- * @param <R>
+ * @param <T> the type
+ * @param <R> the return type
  * @author UnAfraid
  */
 @FunctionalInterface

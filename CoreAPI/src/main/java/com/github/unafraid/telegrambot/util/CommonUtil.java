@@ -26,8 +26,8 @@ package com.github.unafraid.telegrambot.util;
  */
 public class CommonUtil {
 	/**
-	 * @param intValue
-	 * @param defaultValue
+	 * @param intValue     the value
+	 * @param defaultValue the default value
 	 * @return intValue as int if its valid integer value, defaultValue otherwise
 	 */
 	public static int parseInt(String intValue, int defaultValue) {
@@ -39,7 +39,7 @@ public class CommonUtil {
 	}
 	
 	/**
-	 * @param text
+	 * @param text the text
 	 * @return {@code true} if text can be parsed as long, {@code false}
 	 */
 	public static boolean isDigit(String text) {
@@ -100,9 +100,9 @@ public class CommonUtil {
 	}
 	
 	/**
-	 * @param <T>
-	 * @param name     - the text to check
-	 * @param enumType
+	 * @param <T>      the type
+	 * @param name     the text to check
+	 * @param enumType the enum type
 	 * @return {@code true} if {@code text} is enum, {@code false} otherwise
 	 */
 	public static <T extends Enum<T>> boolean isEnum(String name, Class<T> enumType) {
@@ -110,7 +110,8 @@ public class CommonUtil {
 			return false;
 		}
 		try {
-			return Enum.valueOf(enumType, name) != null;
+			Enum.valueOf(enumType, name);
+			return true;
 		} catch (Exception e) {
 			return false;
 		}
