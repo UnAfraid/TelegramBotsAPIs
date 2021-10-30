@@ -47,6 +47,7 @@ import com.github.unafraid.telegrambot.util.BotUtil;
 import com.github.unafraid.telegrambot.util.IThrowableFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -70,6 +71,11 @@ public class AbstractTelegramBot extends TelegramLongPollingBot {
 	private final String _username;
 	
 	public AbstractTelegramBot(String token, String username) {
+		this(token, username, new DefaultBotOptions());
+	}
+	
+	public AbstractTelegramBot(String token, String username, DefaultBotOptions defaultBotOptions) {
+		super(defaultBotOptions);
 		_token = token;
 		_username = username;
 	}
@@ -350,6 +356,7 @@ public class AbstractTelegramBot extends TelegramLongPollingBot {
 	/**
 	 * Validates access level
 	 *
+	 * @param <T>     the type
 	 * @param handler the handler
 	 * @param user    the user requesting the that handler
 	 * @return {@code true} if user is able to use that handler, {@code false} otherwise (Not registered, doesn't have access and so)
