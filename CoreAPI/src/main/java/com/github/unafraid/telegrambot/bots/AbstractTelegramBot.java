@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import com.github.unafraid.telegrambot.handlers.IAccessLevelValidator;
 import com.github.unafraid.telegrambot.handlers.ICallbackQueryHandler;
 import com.github.unafraid.telegrambot.handlers.IChannelPostHandler;
+import com.github.unafraid.telegrambot.handlers.IChatMemberHandler;
 import com.github.unafraid.telegrambot.handlers.IChosenInlineQueryHandler;
 import com.github.unafraid.telegrambot.handlers.ICommandHandler;
 import com.github.unafraid.telegrambot.handlers.IDocumentMessageHandler;
@@ -158,12 +159,18 @@ public class AbstractTelegramBot extends TelegramLongPollingBot {
 				return;
 			}
 			
+			if (update.hasChatMember()) {
+				handleUpdate(IChatMemberHandler.class, update, Update::getChatMember, ChatMemberUpdated::getFrom, handler -> handler.onChatMember(this, update, update.getMyChatMember()));
+				return;
+			}
+			
 			if (update.hasMessage()) {
 				if (update.getMessage().hasDocument()) {
 					handleUpdate(IDocumentMessageHandler.class, update, Update::getMessage, Message::getFrom, handler -> handler.onDocumentSent(this, update, update.getMessage()));
-				} else {
-					handleIncomingMessage(update);
+					return;
 				}
+				
+				handleIncomingMessage(update);
 				return;
 			}
 			
