@@ -38,6 +38,7 @@ import com.github.unafraid.telegrambot.handlers.ICommandHandler;
 import com.github.unafraid.telegrambot.handlers.IDocumentMessageHandler;
 import com.github.unafraid.telegrambot.handlers.IEditedChannelPostHandler;
 import com.github.unafraid.telegrambot.handlers.IEditedMessageHandler;
+import com.github.unafraid.telegrambot.handlers.IHasMyChatMemberHandler;
 import com.github.unafraid.telegrambot.handlers.IInlineQueryHandler;
 import com.github.unafraid.telegrambot.handlers.IMessageHandler;
 import com.github.unafraid.telegrambot.handlers.IPollAnswerHandler;
@@ -54,6 +55,7 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -148,6 +150,11 @@ public class AbstractTelegramBot extends TelegramLongPollingBot {
 			
 			if (update.hasPollAnswer()) {
 				handleUpdate(IPollAnswerHandler.class, update, Update::getPollAnswer, PollAnswer::getUser, handler -> handler.onPollAnswer(this, update, update.getPollAnswer()));
+				return;
+			}
+			
+			if (update.hasMyChatMember()) {
+				handleUpdate(IHasMyChatMemberHandler.class, update, Update::getMyChatMember, ChatMemberUpdated::getFrom, handler -> handler.onHasMyChatMember(this, update, update.getMyChatMember()));
 				return;
 			}
 			
