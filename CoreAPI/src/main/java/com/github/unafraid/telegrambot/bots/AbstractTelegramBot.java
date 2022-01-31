@@ -40,6 +40,7 @@ import com.github.unafraid.telegrambot.handlers.IEditedChannelPostHandler;
 import com.github.unafraid.telegrambot.handlers.IEditedMessageHandler;
 import com.github.unafraid.telegrambot.handlers.IInlineQueryHandler;
 import com.github.unafraid.telegrambot.handlers.IMessageHandler;
+import com.github.unafraid.telegrambot.handlers.IPollAnswerHandler;
 import com.github.unafraid.telegrambot.handlers.IPollHandler;
 import com.github.unafraid.telegrambot.handlers.IPreCheckoutQueryHandler;
 import com.github.unafraid.telegrambot.handlers.IShippingQueryHandler;
@@ -60,7 +61,7 @@ import org.telegram.telegrambots.meta.api.objects.inlinequery.ChosenInlineQuery;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.meta.api.objects.payments.PreCheckoutQuery;
 import org.telegram.telegrambots.meta.api.objects.payments.ShippingQuery;
-import org.telegram.telegrambots.meta.api.objects.polls.Poll;
+import org.telegram.telegrambots.meta.api.objects.polls.PollAnswer;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 /**
@@ -101,56 +102,80 @@ public class AbstractTelegramBot extends TelegramLongPollingBot {
 			}
 			
 			if (update.hasChosenInlineQuery()) {
-				// Handle Chosen inline query
 				handleUpdate(IChosenInlineQueryHandler.class, update, Update::getChosenInlineQuery, ChosenInlineQuery::getFrom, handler -> handler.onChosenInlineQuery(this, update, update.getChosenInlineQuery()));
-			} else if (update.hasInlineQuery()) {
-				// Handle inline query
+				return;
+			}
+			
+			if (update.hasInlineQuery()) {
 				handleUpdate(IInlineQueryHandler.class, update, Update::getInlineQuery, InlineQuery::getFrom, handler -> handler.onInlineQuery(this, update, update.getInlineQuery()));
-			} else if (update.hasCallbackQuery()) {
-				// Handle callback query
+				return;
+			}
+			
+			if (update.hasCallbackQuery()) {
 				handleUpdate(ICallbackQueryHandler.class, update, Update::getCallbackQuery, CallbackQuery::getFrom, handler -> handler.onCallbackQuery(this, update, update.getCallbackQuery()));
-			} else if (update.hasEditedMessage()) {
-				// Handle edited message
+				return;
+			}
+			
+			if (update.hasEditedMessage()) {
 				handleUpdate(IEditedMessageHandler.class, update, Update::getEditedMessage, Message::getFrom, handler -> handler.onEditMessage(this, update, update.getEditedMessage()));
-			} else if (update.hasChannelPost()) {
-				// Handle channel post
+				return;
+			}
+			
+			if (update.hasChannelPost()) {
 				handleUpdate(IChannelPostHandler.class, update, Update::getChannelPost, Message::getFrom, handler -> handler.onChannelPost(this, update, update.getChannelPost()));
-			} else if (update.hasEditedChannelPost()) {
-				// Handle edited channel post
+				return;
+			}
+			
+			if (update.hasEditedChannelPost()) {
 				handleUpdate(IEditedChannelPostHandler.class, update, Update::getChannelPost, Message::getFrom, handler -> handler.onEditedChannelPost(this, update, update.getEditedChannelPost()));
-			} else if (update.hasShippingQuery()) {
-				// Handle edited channel post
+				return;
+			}
+			
+			if (update.hasShippingQuery()) {
 				handleUpdate(IShippingQueryHandler.class, update, Update::getShippingQuery, ShippingQuery::getFrom, handler -> handler.onShippingQuery(this, update, update.getShippingQuery()));
-			} else if (update.hasPreCheckoutQuery()) {
-				// Handle edited channel post
+				return;
+			}
+			
+			if (update.hasPreCheckoutQuery()) {
 				handleUpdate(IPreCheckoutQueryHandler.class, update, Update::getPreCheckoutQuery, PreCheckoutQuery::getFrom, handler -> handler.onPreCheckoutQuery(this, update, update.getPreCheckoutQuery()));
-			} else if (update.hasPoll()) {
-				// Handle edited channel post
+				return;
+			}
+			
+			if (update.hasPoll()) {
 				handleUpdate(IPollHandler.class, update, u -> u, u -> u.getMessage().getFrom(), handler -> handler.onPoll(this, update, update.getPoll()));
-			} else if (update.hasMessage()) {
+				return;
+			}
+			
+			if (update.hasPollAnswer()) {
+				handleUpdate(IPollAnswerHandler.class, update, Update::getPollAnswer, PollAnswer::getUser, handler -> handler.onPollAnswer(this, update, update.getPollAnswer()));
+				return;
+			}
+			
+			if (update.hasMessage()) {
 				if (update.getMessage().hasDocument()) {
 					handleUpdate(IDocumentMessageHandler.class, update, Update::getMessage, Message::getFrom, handler -> handler.onDocumentSent(this, update, update.getMessage()));
 				} else {
-					// Handle message
 					handleIncomingMessage(update);
 				}
-			} else {
-				final List<IUnknownUpdateHandler> unknownHandlers = getAvailableHandlers(IUnknownUpdateHandler.class);
-				if (unknownHandlers.isEmpty()) {
-					LOGGER.warn("Update doesn't contains neither ChosenInlineQuery/InlineQuery/CallbackQuery/EditedMessage/ChannelPost/EditedChannelPost/Message Update: {}", update);
-					return;
-				}
-				
-				for (IUnknownUpdateHandler unknownHandler : unknownHandlers) {
-					try {
-						if (unknownHandler.onUnhandledUpdate(this, update)) {
-							return;
-						}
-					} catch (Exception ex) {
-						LOGGER.error("Uncaught exception in onUnhandledUpdate: {}", update, ex);
+				return;
+			}
+			
+			final List<IUnknownUpdateHandler> unknownHandlers = getAvailableHandlers(IUnknownUpdateHandler.class);
+			if (unknownHandlers.isEmpty()) {
+				LOGGER.warn("Update doesn't contains neither ChosenInlineQuery/InlineQuery/CallbackQuery/EditedMessage/ChannelPost/EditedChannelPost/Message Update: {}", update);
+				return;
+			}
+			
+			for (IUnknownUpdateHandler unknownHandler : unknownHandlers) {
+				try {
+					if (unknownHandler.onUnhandledUpdate(this, update)) {
+						return;
 					}
+				} catch (Exception ex) {
+					LOGGER.error("Uncaught exception in onUnhandledUpdate: {}", update, ex);
 				}
 			}
+			
 		} catch (Exception e) {
 			LOGGER.error("Failed to handle incoming update", e);
 		}
