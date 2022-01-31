@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import com.github.unafraid.telegrambot.handlers.IAccessLevelValidator;
 import com.github.unafraid.telegrambot.handlers.ICallbackQueryHandler;
 import com.github.unafraid.telegrambot.handlers.IChannelPostHandler;
+import com.github.unafraid.telegrambot.handlers.IChatJoinRequestHandler;
 import com.github.unafraid.telegrambot.handlers.IChatMemberHandler;
 import com.github.unafraid.telegrambot.handlers.IChosenInlineQueryHandler;
 import com.github.unafraid.telegrambot.handlers.ICommandHandler;
@@ -56,6 +57,7 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.ChatJoinRequest;
 import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -160,7 +162,12 @@ public class AbstractTelegramBot extends TelegramLongPollingBot {
 			}
 			
 			if (update.hasChatMember()) {
-				handleUpdate(IChatMemberHandler.class, update, Update::getChatMember, ChatMemberUpdated::getFrom, handler -> handler.onChatMember(this, update, update.getMyChatMember()));
+				handleUpdate(IChatMemberHandler.class, update, Update::getChatMember, ChatMemberUpdated::getFrom, handler -> handler.onChatMember(this, update, update.getChatMember()));
+				return;
+			}
+			
+			if (update.hasChatJoinRequest()) {
+				handleUpdate(IChatJoinRequestHandler.class, update, Update::getChatJoinRequest, ChatJoinRequest::getUser, handler -> handler.onChatJoinRequest(this, update, update.getChatJoinRequest()));
 				return;
 			}
 			
