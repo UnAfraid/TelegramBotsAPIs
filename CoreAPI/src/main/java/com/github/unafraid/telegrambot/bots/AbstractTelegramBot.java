@@ -40,6 +40,7 @@ import com.github.unafraid.telegrambot.handlers.IEditedChannelPostHandler;
 import com.github.unafraid.telegrambot.handlers.IEditedMessageHandler;
 import com.github.unafraid.telegrambot.handlers.IInlineQueryHandler;
 import com.github.unafraid.telegrambot.handlers.IMessageHandler;
+import com.github.unafraid.telegrambot.handlers.IPollHandler;
 import com.github.unafraid.telegrambot.handlers.IPreCheckoutQueryHandler;
 import com.github.unafraid.telegrambot.handlers.IShippingQueryHandler;
 import com.github.unafraid.telegrambot.handlers.ITelegramHandler;
@@ -59,6 +60,7 @@ import org.telegram.telegrambots.meta.api.objects.inlinequery.ChosenInlineQuery;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.meta.api.objects.payments.PreCheckoutQuery;
 import org.telegram.telegrambots.meta.api.objects.payments.ShippingQuery;
+import org.telegram.telegrambots.meta.api.objects.polls.Poll;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 /**
@@ -116,12 +118,15 @@ public class AbstractTelegramBot extends TelegramLongPollingBot {
 			} else if (update.hasEditedChannelPost()) {
 				// Handle edited channel post
 				handleUpdate(IEditedChannelPostHandler.class, update, Update::getChannelPost, Message::getFrom, handler -> handler.onEditedChannelPost(this, update, update.getEditedChannelPost()));
-			}  else if (update.hasShippingQuery()) {
+			} else if (update.hasShippingQuery()) {
 				// Handle edited channel post
 				handleUpdate(IShippingQueryHandler.class, update, Update::getShippingQuery, ShippingQuery::getFrom, handler -> handler.onShippingQuery(this, update, update.getShippingQuery()));
-			}  else if (update.hasPreCheckoutQuery()) {
+			} else if (update.hasPreCheckoutQuery()) {
 				// Handle edited channel post
 				handleUpdate(IPreCheckoutQueryHandler.class, update, Update::getPreCheckoutQuery, PreCheckoutQuery::getFrom, handler -> handler.onPreCheckoutQuery(this, update, update.getPreCheckoutQuery()));
+			} else if (update.hasPoll()) {
+				// Handle edited channel post
+				handleUpdate(IPollHandler.class, update, u -> u, u -> u.getMessage().getFrom(), handler -> handler.onPoll(this, update, update.getPoll()));
 			} else if (update.hasMessage()) {
 				if (update.getMessage().hasDocument()) {
 					handleUpdate(IDocumentMessageHandler.class, update, Update::getMessage, Message::getFrom, handler -> handler.onDocumentSent(this, update, update.getMessage()));
