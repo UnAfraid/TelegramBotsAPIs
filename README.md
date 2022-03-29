@@ -167,7 +167,8 @@ public class Main {
 		@Override
 		public void registerMenu(InlineContext ctx, InlineMenuBuilder builder) {
 			//@formatter:off
-			builder.button(new InlineButtonBuilder(ctx)
+			builder.name("Main Menu")
+					.button(new InlineButtonBuilder(ctx)
 							.name("Button 1")
 							.onQueryCallback(this::handleButtonClick)
 							.build())
