@@ -5,9 +5,11 @@ plugins {
 }
 
 dependencies {
-    api("org.slf4j:slf4j-api:1.7.36")
-    api("org.telegram:telegrambots:5.7.1")
-    testImplementation("junit:junit:4.13.2")
+    api("org.slf4j:slf4j-api:2.0.7")
+    api("org.telegram:telegrambots:6.5.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
+    testImplementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
+    testImplementation("org.apache.logging.log4j:log4j-core:2.20.0")
 }
 
 java {
