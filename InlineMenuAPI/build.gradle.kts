@@ -6,7 +6,8 @@ plugins {
 
 dependencies {
     api(project(":CoreAPI"))
-    testImplementation("junit:junit:4.13.2")
+    api(group = "org.telegram", name = "telegrambots-meta", version = "7.2.0")
+    testImplementation(group = "junit", name ="junit", version = "4.13.2")
 }
 
 java {

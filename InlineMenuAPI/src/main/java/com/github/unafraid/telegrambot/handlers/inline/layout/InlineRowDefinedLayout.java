@@ -27,6 +27,7 @@ import java.util.List;
 import com.github.unafraid.telegrambot.handlers.inline.InlineButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 /**
  * @author UnAfraid
@@ -42,16 +43,15 @@ public class InlineRowDefinedLayout implements IInlineMenuLayout {
 	
 	@Override
 	public InlineKeyboardMarkup generateLayout(List<InlineButton> buttons) {
-		final InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-		markup.setKeyboard(new ArrayList<>());
+		final List<InlineKeyboardRow> keyboard = new ArrayList<>();
 		buttons.forEach(uiButton ->
 		{
 			final InlineKeyboardButton button = uiButton.createInlineKeyboardButton();
-			if ((markup.getKeyboard().size() <= uiButton.getRow()) || uiButton.isForceNewRow()) {
-				markup.getKeyboard().add(new ArrayList<>());
+			if ((keyboard.size() <= uiButton.getRow()) || uiButton.isForceNewRow()) {
+				keyboard.add(new InlineKeyboardRow());
 			}
-			markup.getKeyboard().get(uiButton.isForceNewRow() ? (markup.getKeyboard().size() - 1) : uiButton.getRow()).add(button);
+			keyboard.get(uiButton.isForceNewRow() ? (keyboard.size() - 1) : uiButton.getRow()).add(button);
 		});
-		return markup;
+		return InlineKeyboardMarkup.builder().keyboard(keyboard).build();
 	}
 }

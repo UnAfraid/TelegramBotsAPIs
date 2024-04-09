@@ -26,20 +26,32 @@ import com.github.unafraid.telegrambot.util.BotUtil;
 import com.github.unafraid.telegrambot.util.IThrowableFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
+import org.telegram.telegrambots.meta.api.methods.GetMe;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.SetChatPhoto;
+import org.telegram.telegrambots.meta.api.methods.send.*;
+import org.telegram.telegrambots.meta.api.methods.stickers.*;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.ChosenInlineQuery;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.api.objects.payments.PreCheckoutQuery;
 import org.telegram.telegrambots.meta.api.objects.payments.ShippingQuery;
 import org.telegram.telegrambots.meta.api.objects.polls.PollAnswer;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,26 +60,28 @@ import java.util.stream.Collectors;
 /**
  * @author UnAfraid
  */
-public class AbstractTelegramBot extends TelegramLongPollingBot {
+public class AbstractTelegramBot implements LongPollingUpdateConsumer, TelegramClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTelegramBot.class);
     private static final Pattern COMMAND_ARGS_PATTERN = Pattern.compile("\"([^\"]*)\"|([^\\s]+)");
 
     private final List<ITelegramHandler> handlers = new ArrayList<>();
     private volatile IAccessLevelValidator accessLevelValidator = null;
+    private volatile String username;
 
-    private final String _username;
+    private final TelegramClient telegramClient;
 
-    public AbstractTelegramBot(String token, String username) {
-        this(token, username, new DefaultBotOptions());
-    }
-
-    public AbstractTelegramBot(String token, String username, DefaultBotOptions defaultBotOptions) {
-        super(defaultBotOptions, token);
-        _username = username;
+    public AbstractTelegramBot(TelegramClient telegramClient) {
+        this.telegramClient = telegramClient;
     }
 
     @Override
-    public void onUpdateReceived(Update update) {
+    public void consume(List<Update> updates) {
+        for (Update update : updates) {
+            processUpdate(update);
+        }
+    }
+
+    private void processUpdate(Update update) {
         try {
             final List<IUpdateHandler> updateHandlers = getAvailableHandlers(IUpdateHandler.class);
             for (IUpdateHandler updateHandler : updateHandlers) {
@@ -229,6 +243,23 @@ public class AbstractTelegramBot extends TelegramLongPollingBot {
         return text;
     }
 
+    private String getBotUsername() {
+        if (username == null) {
+            synchronized (this) {
+                if (username == null) {
+                    try {
+                        final User user = telegramClient.execute(GetMe.builder().build());
+                        username = user.getUserName();
+                    } catch (TelegramApiException e) {
+                        throw new IllegalStateException("failed to get bot username", e);
+                    }
+                }
+            }
+        }
+        return username;
+    }
+
+
     /**
      * @param update the update
      */
@@ -262,7 +293,7 @@ public class AbstractTelegramBot extends TelegramLongPollingBot {
             if (handler != null) {
                 try {
                     if (!validateAccessLevel(handler, message.getFrom())) {
-                        BotUtil.sendMessage(this, message, message.getFrom().getUserName() + ": You are not authorized to use this function!", true, false, null);
+                        BotUtil.sendMessage(telegramClient, message, message.getFrom().getUserName() + ": You are not authorized to use this function!", true, false, null);
                         return;
                     }
 
@@ -286,11 +317,6 @@ public class AbstractTelegramBot extends TelegramLongPollingBot {
                 }
             }
         }
-    }
-
-    @Override
-    public String getBotUsername() {
-        return _username;
     }
 
     /**
@@ -400,5 +426,196 @@ public class AbstractTelegramBot extends TelegramLongPollingBot {
             return true;
         }
         return accessLevelValidator.validate(handler, user);
+    }
+
+    @Override
+    public <T extends Serializable, Method extends BotApiMethod<T>> CompletableFuture<T> executeAsync(Method method) throws TelegramApiException {
+        return telegramClient.executeAsync(method);
+    }
+
+    @Override
+    public <T extends Serializable, Method extends BotApiMethod<T>> T execute(Method method) throws TelegramApiException {
+        return telegramClient.execute(method);
+    }
+
+    @Override
+    public Message execute(SendDocument sendDocument) throws TelegramApiException {
+        return telegramClient.execute(sendDocument);
+    }
+
+    @Override
+    public Message execute(SendPhoto sendPhoto) throws TelegramApiException {
+        return telegramClient.execute(sendPhoto);
+    }
+
+    @Override
+    public Message execute(SendVideo sendVideo) throws TelegramApiException {
+        return telegramClient.execute(sendVideo);
+    }
+
+    @Override
+    public Message execute(SendVideoNote sendVideoNote) throws TelegramApiException {
+        return telegramClient.execute(sendVideoNote);
+    }
+
+    @Override
+    public Message execute(SendSticker sendSticker) throws TelegramApiException {
+        return telegramClient.execute(sendSticker);
+    }
+
+    @Override
+    public Message execute(SendAudio sendAudio) throws TelegramApiException {
+        return telegramClient.execute(sendAudio);
+    }
+
+    @Override
+    public Message execute(SendVoice sendVoice) throws TelegramApiException {
+        return telegramClient.execute(sendVoice);
+    }
+
+    @Override
+    public List<Message> execute(SendMediaGroup sendMediaGroup) throws TelegramApiException {
+        return telegramClient.execute(sendMediaGroup);
+    }
+
+    @Override
+    public Boolean execute(SetChatPhoto setChatPhoto) throws TelegramApiException {
+        return telegramClient.execute(setChatPhoto);
+    }
+
+    @Override
+    public Boolean execute(AddStickerToSet addStickerToSet) throws TelegramApiException {
+        return telegramClient.execute(addStickerToSet);
+    }
+
+    @Override
+    public Boolean execute(ReplaceStickerInSet replaceStickerInSet) throws TelegramApiException {
+        return telegramClient.execute(replaceStickerInSet);
+    }
+
+    @Override
+    public Boolean execute(SetStickerSetThumbnail setStickerSetThumbnail) throws TelegramApiException {
+        return telegramClient.execute(setStickerSetThumbnail);
+    }
+
+    @Override
+    public Boolean execute(CreateNewStickerSet createNewStickerSet) throws TelegramApiException {
+        return telegramClient.execute(createNewStickerSet);
+    }
+
+    @Override
+    public File execute(UploadStickerFile uploadStickerFile) throws TelegramApiException {
+        return telegramClient.execute(uploadStickerFile);
+    }
+
+    @Override
+    public Serializable execute(EditMessageMedia editMessageMedia) throws TelegramApiException {
+        return telegramClient.execute(editMessageMedia);
+    }
+
+    @Override
+    public java.io.File downloadFile(File file) throws TelegramApiException {
+        return telegramClient.downloadFile(file);
+    }
+
+    @Override
+    public InputStream downloadFileAsStream(File file) throws TelegramApiException {
+        return telegramClient.downloadFileAsStream(file);
+    }
+
+    @Override
+    public Message execute(SendAnimation sendAnimation) throws TelegramApiException {
+        return telegramClient.execute(sendAnimation);
+    }
+
+    @Override
+    public CompletableFuture<Message> executeAsync(SendDocument sendDocument) {
+        return telegramClient.executeAsync(sendDocument);
+    }
+
+    @Override
+    public CompletableFuture<Message> executeAsync(SendPhoto sendPhoto) {
+        return telegramClient.executeAsync(sendPhoto);
+    }
+
+    @Override
+    public CompletableFuture<Message> executeAsync(SendVideo sendVideo) {
+        return telegramClient.executeAsync(sendVideo);
+    }
+
+    @Override
+    public CompletableFuture<Message> executeAsync(SendVideoNote sendVideoNote) {
+        return telegramClient.executeAsync(sendVideoNote);
+    }
+
+    @Override
+    public CompletableFuture<Message> executeAsync(SendSticker sendSticker) {
+        return telegramClient.executeAsync(sendSticker);
+    }
+
+    @Override
+    public CompletableFuture<Message> executeAsync(SendAudio sendAudio) {
+        return telegramClient.executeAsync(sendAudio);
+    }
+
+    @Override
+    public CompletableFuture<Message> executeAsync(SendVoice sendVoice) {
+        return telegramClient.executeAsync(sendVoice);
+    }
+
+    @Override
+    public CompletableFuture<List<Message>> executeAsync(SendMediaGroup sendMediaGroup) {
+        return telegramClient.executeAsync(sendMediaGroup);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> executeAsync(SetChatPhoto setChatPhoto) {
+        return telegramClient.executeAsync(setChatPhoto);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> executeAsync(AddStickerToSet addStickerToSet) {
+        return telegramClient.executeAsync(addStickerToSet);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> executeAsync(ReplaceStickerInSet replaceStickerInSet) {
+        return telegramClient.executeAsync(replaceStickerInSet);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> executeAsync(SetStickerSetThumbnail setStickerSetThumbnail) {
+        return telegramClient.executeAsync(setStickerSetThumbnail);
+
+    }
+
+    @Override
+    public CompletableFuture<Boolean> executeAsync(CreateNewStickerSet createNewStickerSet) {
+        return telegramClient.executeAsync(createNewStickerSet);
+    }
+
+    @Override
+    public CompletableFuture<File> executeAsync(UploadStickerFile uploadStickerFile) {
+        return telegramClient.executeAsync(uploadStickerFile);
+    }
+
+    @Override
+    public CompletableFuture<Serializable> executeAsync(EditMessageMedia editMessageMedia) {
+        return telegramClient.executeAsync(editMessageMedia);
+    }
+
+    @Override
+    public CompletableFuture<Message> executeAsync(SendAnimation sendAnimation) {
+        return telegramClient.executeAsync(sendAnimation);
+    }
+
+    @Override
+    public CompletableFuture<java.io.File> downloadFileAsync(File file) {
+        return telegramClient.downloadFileAsync(file);
+    }
+
+    @Override
+    public CompletableFuture<InputStream> downloadFileAsStreamAsync(File file) {
+        return telegramClient.downloadFileAsStreamAsync(file);
     }
 }

@@ -21,7 +21,8 @@
  */
 package com.github.unafraid.telegrambot.bots;
 
-import org.telegram.telegrambots.bots.DefaultBotOptions;
+
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 /**
  * Default Telegram bot implementation, handles all updates and sends notification to registered handlers.
@@ -29,11 +30,7 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
  * @author UnAfraid
  */
 public class DefaultTelegramBot extends AbstractTelegramBot {
-	public DefaultTelegramBot(String token, String username) {
-		super(token, username);
-	}
-	
-	public DefaultTelegramBot(String token, String username, DefaultBotOptions defaultBotOptions) {
-		super(token, username, defaultBotOptions);
+	public DefaultTelegramBot(TelegramClient telegramClient) {
+		super(telegramClient);
 	}
 }

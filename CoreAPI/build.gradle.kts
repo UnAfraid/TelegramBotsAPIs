@@ -5,11 +5,11 @@ plugins {
 }
 
 dependencies {
-    api("org.slf4j:slf4j-api:1.7.36")
-    api("org.telegram:telegrambots:6.8.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
-    testImplementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.21.0")
-    testImplementation("org.apache.logging.log4j:log4j-core:2.21.0")
+    api(group = "org.slf4j", name = "slf4j-api", version = "1.7.36")
+    api(group = "org.telegram", name = "telegrambots-longpolling", version = "7.2.0")
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.9.3")
+    testImplementation(group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version = "2.21.0")
+    testImplementation(group = "org.apache.logging.log4j", name = "log4j-core", "2.21.0")
 }
 
 java {

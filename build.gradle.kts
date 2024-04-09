@@ -2,13 +2,13 @@ subprojects {
     apply(plugin = "java")
     apply(plugin = "maven-publish")
 
-    configure<JavaPluginConvention> {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+    configure<JavaPluginExtension> {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     group = "com.github.unafraid.telegram-apis"
-    version = "1.0.15"
+    version = "2.0.0"
 
     repositories {
         mavenCentral()

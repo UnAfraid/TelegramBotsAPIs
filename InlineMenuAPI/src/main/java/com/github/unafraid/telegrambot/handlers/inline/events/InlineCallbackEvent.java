@@ -25,7 +25,7 @@ import com.github.unafraid.telegrambot.handlers.inline.InlineButton;
 import com.github.unafraid.telegrambot.handlers.inline.InlineContext;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.bots.AbsSender;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 /**
  * @author UnAfraid
@@ -33,21 +33,21 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 public class InlineCallbackEvent {
 	private final InlineContext context;
 	private final InlineButton button;
-	private final AbsSender bot;
+	private final TelegramClient telegramClient;
 	private final Update update;
 	private final CallbackQuery query;
 	
 	/**
 	 * @param context the context
 	 * @param button  the button
-	 * @param bot     the bot
+	 * @param telegramClient     the bot
 	 * @param update  the update received
 	 * @param query   the query received
 	 */
-	public InlineCallbackEvent(InlineContext context, InlineButton button, AbsSender bot, Update update, CallbackQuery query) {
+	public InlineCallbackEvent(InlineContext context, InlineButton button, TelegramClient telegramClient, Update update, CallbackQuery query) {
 		this.context = context;
 		this.button = button;
-		this.bot = bot;
+		this.telegramClient = telegramClient;
 		this.update = update;
 		this.query = query;
 	}
@@ -69,8 +69,8 @@ public class InlineCallbackEvent {
 	/**
 	 * @return the bot
 	 */
-	public AbsSender getBot() {
-		return bot;
+	public TelegramClient getTelegramClient() {
+		return telegramClient;
 	}
 	
 	/**

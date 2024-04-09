@@ -21,7 +21,6 @@
  */
 package com.github.unafraid.telegrambot.handlers.inline;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,6 +28,7 @@ import java.util.Objects;
 
 import com.github.unafraid.telegrambot.handlers.inline.layout.IInlineMenuLayout;
 import com.github.unafraid.telegrambot.handlers.inline.layout.InlineRowDefinedLayout;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author UnAfraid

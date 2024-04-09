@@ -21,7 +21,6 @@
  */
 package com.github.unafraid.telegrambot.handlers.inline;
 
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,10 +29,12 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import com.github.unafraid.telegrambot.handlers.inline.layout.IInlineMenuLayout;
 import com.github.unafraid.telegrambot.util.BotUtil;
 import com.github.unafraid.telegrambot.util.MapUtil;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.jetbrains.annotations.NotNull;
+import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 /**
  * This class is thread-safe
@@ -152,7 +153,7 @@ public class InlineUserData {
 	 * @param menu    the menu
 	 * @throws TelegramApiException in case of an error
 	 */
-	public void sendMenu(@NotNull AbsSender bot, @NotNull Message message, @NotNull String text, @NotNull IInlineMenuLayout layout, @NotNull InlineMenu menu) throws TelegramApiException {
+	public void sendMenu(@NotNull TelegramClient bot, @NotNull Message message, @NotNull String text, @NotNull IInlineMenuLayout layout, @NotNull InlineMenu menu) throws TelegramApiException {
 		Objects.requireNonNull(bot);
 		Objects.requireNonNull(message);
 		Objects.requireNonNull(text);
@@ -174,7 +175,7 @@ public class InlineUserData {
 	 * @param menu    the menu
 	 * @throws TelegramApiException in case of an error
 	 */
-	public void editCurrentMenu(@NotNull AbsSender bot, @NotNull Message message, @NotNull String text, @NotNull IInlineMenuLayout layout, @NotNull InlineMenu menu) throws TelegramApiException {
+	public void editCurrentMenu(@NotNull TelegramClient bot, @NotNull MaybeInaccessibleMessage message, @NotNull String text, @NotNull IInlineMenuLayout layout, @NotNull InlineMenu menu) throws TelegramApiException {
 		Objects.requireNonNull(bot);
 		Objects.requireNonNull(message);
 		Objects.requireNonNull(text);
@@ -187,7 +188,9 @@ public class InlineUserData {
 		
 		activeMenu = menu;
 		final InlineKeyboardMarkup markup = layout.generateLayout(activeMenu.getButtons());
-		BotUtil.editMessage(bot, message, text, true, markup);
+		if (message instanceof Message msg) {
+			BotUtil.editMessage(bot, msg, text, true, markup);
+		}
 	}
 	
 	/**
@@ -199,7 +202,7 @@ public class InlineUserData {
 	 * @param menu    the menu
 	 * @throws TelegramApiException in case of an error
 	 */
-	public void editCurrentMenu(AbsSender bot, Message message, IInlineMenuLayout layout, InlineMenu menu) throws TelegramApiException {
+	public void editCurrentMenu(@NotNull TelegramClient bot, @NotNull Message message, @NotNull IInlineMenuLayout layout, @NotNull InlineMenu menu) throws TelegramApiException {
 		Objects.requireNonNull(bot);
 		Objects.requireNonNull(message);
 		Objects.requireNonNull(layout);
