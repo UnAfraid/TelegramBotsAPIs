@@ -6,7 +6,7 @@ plugins {
 
 dependencies {
     api(group = "org.slf4j", name = "slf4j-api", version = "1.7.36")
-    api(group = "org.telegram", name = "telegrambots-longpolling", version = "7.2.0")
+    api(group = "org.telegram", name = "telegrambots-longpolling", version = "7.7.0")
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.9.3")
     testImplementation(group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version = "2.21.0")
     testImplementation(group = "org.apache.logging.log4j", name = "log4j-core", "2.21.0")

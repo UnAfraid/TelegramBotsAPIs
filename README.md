@@ -12,21 +12,21 @@ This library depends on https://github.com/rubenlagus/TelegramBots, check it out
 <dependency>
     <groupId>com.github.unafraid.telegram-apis</groupId>
     <artifactId>CoreAPI</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/com.github.unafraid.telegram-apis/InlineMenuAPI -->
 <dependency>
     <groupId>com.github.unafraid.telegram-apis</groupId>
     <artifactId>InlineMenuAPI</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/org.telegram/telegrambots-client -->
 <dependency>
     <groupId>org.telegram</groupId>
     <artifactId>telegrambots-client</artifactId>
-    <version>7.2.0</version>
+    <version>7.7.0</version>
 </dependency>
 
 ```
@@ -34,13 +34,13 @@ This library depends on https://github.com/rubenlagus/TelegramBots, check it out
 # Gradle dependency
 ```gradle
 // https://mvnrepository.com/artifact/com.github.unafraid.telegram-apis/CoreAPI
-implementation("com.github.unafraid.telegram-apis:CoreAPI:2.0.0")
+implementation("com.github.unafraid.telegram-apis:CoreAPI:2.0.1")
 
 // https://mvnrepository.com/artifact/com.github.unafraid.telegram-apis/InlineMenuAPI
-implementation("com.github.unafraid.telegram-apis:InlineMenuAPI:2.0.0")
+implementation("com.github.unafraid.telegram-apis:InlineMenuAPI:2.0.1")
 
 // https://mvnrepository.com/artifact/org.telegram/telegrambots-client
-implementation("org.telegram:telegrambots-client:7.2.0")
+implementation("org.telegram:telegrambots-client:7.7.0")
 ```
 
 In order to get started download the library from maven central as jar or maven/gradle dependency manager.
