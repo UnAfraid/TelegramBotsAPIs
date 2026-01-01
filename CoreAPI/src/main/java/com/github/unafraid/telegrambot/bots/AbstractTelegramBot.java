@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
 import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.business.SetBusinessAccountProfilePhoto;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.SetChatPhoto;
 import org.telegram.telegrambots.meta.api.methods.send.*;
 import org.telegram.telegrambots.meta.api.methods.stickers.*;
@@ -470,6 +471,11 @@ public class AbstractTelegramBot implements LongPollingUpdateConsumer, TelegramC
     }
 
     @Override
+    public Boolean execute(SetBusinessAccountProfilePhoto setBusinessAccountProfilePhoto) throws TelegramApiException {
+        return telegramClient.execute(setBusinessAccountProfilePhoto);
+    }
+
+    @Override
     public Message execute(SendAudio sendAudio) throws TelegramApiException {
         return telegramClient.execute(sendAudio);
     }
@@ -628,6 +634,11 @@ public class AbstractTelegramBot implements LongPollingUpdateConsumer, TelegramC
     @Override
     public CompletableFuture<Message> executeAsync(SendAnimation sendAnimation) {
         return telegramClient.executeAsync(sendAnimation);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> executeAsync(SetBusinessAccountProfilePhoto setBusinessAccountProfilePhoto) {
+        return telegramClient.executeAsync(setBusinessAccountProfilePhoto);
     }
 
     @Override

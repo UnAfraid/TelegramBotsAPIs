@@ -8,7 +8,7 @@ subprojects {
     }
 
     group = "com.github.unafraid.telegram-apis"
-    version = "2.0.1"
+    version = "2.0.2"
 
     repositories {
         mavenCentral()
