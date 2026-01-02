@@ -7,7 +7,7 @@ plugins {
 dependencies {
     api(project(":CoreAPI"))
     api(group = "org.telegram", name = "telegrambots-meta", version = "9.2.0")
-    testImplementation(group = "junit", name ="junit", version = "4.13.2")
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = "6.0.1")
 }
 
 java {

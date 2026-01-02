@@ -12,14 +12,14 @@ This library depends on https://github.com/rubenlagus/TelegramBots, check it out
 <dependency>
     <groupId>com.github.unafraid.telegram-apis</groupId>
     <artifactId>CoreAPI</artifactId>
-    <version>2.0.2/version>
+    <version>2.0.3/version>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/com.github.unafraid.telegram-apis/InlineMenuAPI -->
 <dependency>
     <groupId>com.github.unafraid.telegram-apis</groupId>
     <artifactId>InlineMenuAPI</artifactId>
-    <version>2.0.2/version>
+    <version>2.0.3/version>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/org.telegram/telegrambots-client -->
@@ -34,10 +34,10 @@ This library depends on https://github.com/rubenlagus/TelegramBots, check it out
 # Gradle dependency
 ```gradle
 // https://mvnrepository.com/artifact/com.github.unafraid.telegram-apis/CoreAPI
-implementation("com.github.unafraid.telegram-apis:CoreAPI:2.0.2")
+implementation("com.github.unafraid.telegram-apis:CoreAPI:2.0.3")
 
 // https://mvnrepository.com/artifact/com.github.unafraid.telegram-apis/InlineMenuAPI
-implementation("com.github.unafraid.telegram-apis:InlineMenuAPI:2.0.2")
+implementation("com.github.unafraid.telegram-apis:InlineMenuAPI:2.0.3")
 
 // https://mvnrepository.com/artifact/org.telegram/telegrambots-client
 implementation("org.telegram:telegrambots-client:9.2.0")
