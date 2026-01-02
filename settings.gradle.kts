@@ -1,5 +1,5 @@
-rootProject.name = "TelegramBotsAPIs"
+rootProject.name = "telegram-bots-api"
 
-include("CoreAPI")
-include("InlineMenuAPI")
-include("ExampleBot")
+include("core-api")
+include("inline-menu-api")
+include("example-bot")

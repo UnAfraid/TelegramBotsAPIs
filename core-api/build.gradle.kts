@@ -5,9 +5,11 @@ plugins {
 }
 
 dependencies {
-    api(project(":CoreAPI"))
-    api(group = "org.telegram", name = "telegrambots-meta", version = "9.2.0")
-    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = "6.0.1")
+    api(group = "org.slf4j", name = "slf4j-api", version = "2.0.17")
+    api(group = "org.telegram", name = "telegrambots-longpolling", version = "9.2.0")
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "6.0.1")
+    testImplementation(group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version = "2.25.3")
+    testImplementation(group = "org.apache.logging.log4j", name = "log4j-core", "2.25.3")
 }
 
 java {
@@ -16,16 +18,6 @@ java {
 }
 
 publishing {
-    repositories {
-        maven {
-            name = "MavenCentral"
-            url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
-            credentials {
-                username = getRepositoryUsername()
-                password = getRepositoryPassword()
-            }
-        }
-    }
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
@@ -67,12 +59,3 @@ signing {
     sign(publishing.publications["maven"])
 }
 
-fun getRepositoryUsername(): String {
-    return project.findProperty("ossrhUsername") as String?
-            ?: ""
-}
-
-fun getRepositoryPassword(): String {
-    return project.findProperty("ossrhPassword") as String?
-            ?: ""
-}
