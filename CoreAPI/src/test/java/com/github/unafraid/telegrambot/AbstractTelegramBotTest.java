@@ -7,18 +7,27 @@ import com.github.unafraid.telegrambot.handlers.IPollHandler;
 import com.github.unafraid.telegrambot.handlers.IUpdateHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.api.objects.polls.Poll;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AbstractTelegramBotTest {
     @Test
-    public void onUpdateReceivedMessage() {
-        final DefaultTelegramBot bot = new DefaultTelegramBot(null);
+    public void onUpdateReceivedMessage() throws TelegramApiException {
+        TelegramClient telegramClient = Mockito.mock(TelegramClient.class);
+
+        User me = new User(0L, "TestBot", true);
+        Mockito.doReturn(me).when(telegramClient).execute(Mockito.any(GetMe.class));
+
+        final DefaultTelegramBot bot = new DefaultTelegramBot(telegramClient);
         final AtomicBoolean didCall = new AtomicBoolean();
         {
             bot.addHandler(new ICommandHandler() {
@@ -58,7 +67,7 @@ public class AbstractTelegramBotTest {
         }
 
         final Message msg = new Message();
-        msg.setFrom(User.builder().build());
+        msg.setFrom(new User(0L, "TestBot", true));
         msg.setMessageId(12345);
         msg.setText("/command test 1 2 3");
 
@@ -78,7 +87,7 @@ public class AbstractTelegramBotTest {
         {
             bot.addHandler((IPollHandler) (b, u, poll) -> {
                 Assertions.assertNotNull(poll);
-                Assertions.assertEquals(poll.getId(), "test");
+                Assertions.assertEquals("test", poll.getId());
                 Assertions.assertTrue(didCall.compareAndSet(false, true));
                 return true;
             });
@@ -88,13 +97,13 @@ public class AbstractTelegramBotTest {
                 Assertions.assertNotNull(u);
                 Assertions.assertTrue(u.hasPoll());
                 Assertions.assertNotNull(u.getPoll());
-                Assertions.assertEquals(u.getPoll().getId(), "test");
+                Assertions.assertEquals("test", u.getPoll().getId());
                 return false;
             });
         }
 
         final Message msg = new Message();
-        msg.setFrom(User.builder().build());
+        msg.setFrom(new User(0L, "TestBot", true));
 
         final Poll poll = new Poll();
         poll.setId("test");

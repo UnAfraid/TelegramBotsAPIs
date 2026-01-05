@@ -24,7 +24,6 @@ package com.github.unafraid.telegrambot.util;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -63,9 +62,7 @@ public final class MapUtil {
 	 */
 	public void merge(MapUtil newSet) {
 		Map<String, Object> newMap = newSet.getInternalMap();
-		for (Entry<String, Object> entry : newMap.entrySet()) {
-			values.put(entry.getKey(), entry.getValue());
-		}
+        values.putAll(newMap);
 	}
 	
 	/**
@@ -566,7 +563,7 @@ public final class MapUtil {
 		Objects.requireNonNull(key);
 		Objects.requireNonNull(clazz);
 		final Object obj = values.get(key);
-		if ((obj == null) || !(obj instanceof Set<?>)) {
+		if (!(obj instanceof Set<?>)) {
 			return null;
 		}
 		
@@ -668,12 +665,11 @@ public final class MapUtil {
 	@SuppressWarnings("unchecked")
 	public <K, V> Map<K, V> getMap(String key, Class<K> keyClass, Class<V> valueClass) {
 		final Object obj = values.get(key);
-		if (!(obj instanceof Map<?, ?>)) {
+		if (!(obj instanceof Map<?, ?> originalList)) {
 			return null;
 		}
-		
-		final Map<?, ?> originalList = (Map<?, ?>) obj;
-		if (!originalList.isEmpty()) {
+
+        if (!originalList.isEmpty()) {
 			if ((!originalList.keySet().stream().allMatch(keyClass::isInstance)) || (!originalList.values().stream().allMatch(valueClass::isInstance))) {
 				LOGGER.warn("getMap(\"{}\", {}, {}) requested with wrong generic type: {}!", key, keyClass.getSimpleName(), valueClass.getSimpleName(), obj.getClass().getGenericInterfaces()[0], new ClassNotFoundException());
 			}
@@ -684,12 +680,11 @@ public final class MapUtil {
 	@SuppressWarnings("unchecked")
 	public <K, V> Map<K, List<V>> getMapOfList(String key, Class<K> keyClass, Class<V> valueClass) {
 		final Object obj = values.get(key);
-		if (!(obj instanceof Map<?, ?>)) {
+		if (!(obj instanceof Map<?, ?> originalList)) {
 			return null;
 		}
-		
-		final Map<?, ?> originalList = (Map<?, ?>) obj;
-		if (!originalList.isEmpty()) {
+
+        if (!originalList.isEmpty()) {
 			if ((!originalList.keySet().stream().allMatch(keyClass::isInstance)) || (!originalList.values().stream().allMatch(List.class::isInstance))) {
 				LOGGER.warn("getMap(\"{}\", {}, {}) requested with wrong generic type: {}!", key, keyClass.getSimpleName(), valueClass.getSimpleName(), obj.getClass().getGenericInterfaces()[0], new ClassNotFoundException());
 			}
